@@ -100,13 +100,30 @@
 
 <body>
     <div class="background"></div>
-    <button class="mario"></button>
+    <button class="mario" , id="mario"></button>
     <div class="name_mario">Марио</div>
     <div class="character_mario">Персонаж</div>
-    <button class="albert"></button>
+    <button class="albert" , id="albert"></button>
     <div class="name_albert">Альберт Эйнштейн</div>
     <div class="character_albert">Физик-теоретик</div>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        let tg = window.Telegram.WebApp;
+        let choose_mario = document.getElementById("mario");
+        let choose_albert = document.getElementById("albert");
+        tg.expand();
+
+        choose_mario.addEventListener("click", () => {
+            let choosed_character = "Mario";
+            tg.sendData(choosed_character);
+            tg.close();
+        })
+        choose_albert.addEventListener("click", () => {
+            let choosed_character = "Albert";
+            tg.sendData(choosed_character);
+            tg.close();
+        })
+    </script>
 </body>
 
 </html>

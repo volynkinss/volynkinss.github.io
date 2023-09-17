@@ -113,18 +113,18 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         let tg = window.Telegram.WebApp;
-        let choose_mario = document.getElementById("mario");
-        let choose_albert = document.getElementById("albert");
+        let select_mario = document.getElementById("mario");
+        let select_albert = document.getElementById("albert");
         tg.expand();
 
         choose_mario.addEventListener("click", () => {
-            let choosed_character = "mario";
-            tg.sendData(choosed_character);
+            let selected_character = "mario";
+            tg.sendData(selected_character);
             tg.close();
         })
         choose_albert.addEventListener("click", () => {
-            let choosed_character = "albert";
-            tg.sendData(choosed_character);
+            let selected_character = "albert";
+            tg.sendData(selected_character);
             tg.close();
         })
     </script>

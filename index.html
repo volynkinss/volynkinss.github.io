@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,30 +25,31 @@
   <div class="bg-grid" aria-hidden="true"></div>
 
   <header class="topbar reveal">
-    <div class="brand">
+    <a href="#top" class="brand" data-brand-link aria-label="Go to top section">
       <span class="brand-mark">SV</span>
       <div class="brand-text">
         <strong>Sergey Volynkin</strong>
         <small>Middle Backend Python Engineer</small>
       </div>
-    </div>
+    </a>
 
     <nav class="nav" aria-label="Main sections">
-      <a href="#about" data-i18n="nav.about" data-nav-link></a>
-      <a href="#skills" data-i18n="nav.skills" data-nav-link></a>
       <a href="#projects" data-i18n="nav.projects" data-nav-link></a>
+      <a href="#skills" data-i18n="nav.skills" data-nav-link></a>
+      <a href="#about" data-i18n="nav.about" data-nav-link></a>
+      <a href="#experience" data-i18n="experience.title" data-nav-link></a>
+      <a href="#interests" data-i18n="interests.title" data-nav-link></a>
       <a href="#contacts" data-i18n="nav.contacts" data-nav-link></a>
     </nav>
 
     <div class="lang-switch" role="group" aria-label="Language switch">
-      <button type="button" class="lang-btn is-active" data-lang-btn="ru">RU</button>
-      <button type="button" class="lang-btn" data-lang-btn="en">EN</button>
+      <button type="button" class="lang-btn" data-lang-btn="ru">RU</button>
+      <button type="button" class="lang-btn is-active" data-lang-btn="en">EN</button>
     </div>
   </header>
 
   <main class="container">
     <section class="hero reveal observed-section" id="top">
-      <p class="eyebrow" data-i18n="hero.eyebrow"></p>
       <h1 data-i18n="hero.title"></h1>
       <p class="hero-subtitle" data-i18n="hero.subtitle"></p>
 
@@ -61,19 +62,26 @@
       </div>
     </section>
 
-    <section id="about" class="panel reveal observed-section">
-      <h2 data-i18n="about.title"></h2>
-      <p data-i18n="about.p1"></p>
-      <p data-i18n="about.p2"></p>
+    <section id="projects" class="panel reveal observed-section">
+      <div class="section-head">
+        <h2 data-i18n="projects.title"></h2>
+        <p data-i18n="projects.subtitle"></p>
+      </div>
+      <div id="projects-accordion" class="projects-accordion"></div>
     </section>
 
     <section id="skills" class="panel reveal observed-section">
       <div class="section-head">
         <h2 data-i18n="skills.title"></h2>
-        <p data-i18n="skills.subtitle"></p>
       </div>
       <div id="skills-grid" class="skills-grid"></div>
       <p class="section-note" data-i18n="skills.note"></p>
+    </section>
+
+    <section id="about" class="panel reveal observed-section">
+      <h2 data-i18n="about.title"></h2>
+      <p data-i18n="about.p1"></p>
+      <p data-i18n="about.p2"></p>
     </section>
 
     <section id="experience" class="panel reveal observed-section">
@@ -81,14 +89,6 @@
         <h2 data-i18n="experience.title"></h2>
       </div>
       <div id="experience-list" class="experience-list"></div>
-    </section>
-
-    <section id="projects" class="panel reveal observed-section">
-      <div class="section-head">
-        <h2 data-i18n="projects.title"></h2>
-        <p data-i18n="projects.subtitle"></p>
-      </div>
-      <div id="projects-accordion" class="projects-accordion"></div>
     </section>
 
     <section id="interests" class="panel reveal observed-section">

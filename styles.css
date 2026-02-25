@@ -20,6 +20,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--anchor-offset, 120px);
 }
 
 body {
@@ -107,6 +108,19 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  padding: 6px 8px;
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.brand:hover {
+  background: var(--accent-soft);
+}
+
+.brand.is-active {
+  background: var(--accent-soft);
 }
 
 .brand-mark {
@@ -187,6 +201,10 @@ body {
   margin: 16px auto 0;
   display: grid;
   gap: 16px;
+}
+
+.observed-section {
+  scroll-margin-top: var(--anchor-offset, 120px);
 }
 
 .hero,
@@ -580,8 +598,8 @@ summary:focus-visible {
 }
 
 .reveal {
-  opacity: 0;
-  transform: translateY(12px);
+  opacity: 1;
+  transform: translateY(0);
   transition: opacity 0.55s ease, transform 0.55s ease;
 }
 

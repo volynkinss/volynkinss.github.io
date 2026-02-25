@@ -14,14 +14,14 @@ const i18n = {
       facts: [
         "Санкт-Петербург",
         "Дата рождения: 04.11.1994 (31)",
-        "Текущий фокус: Backend + DevOps развитие",
-        "Полная занятость, возможны командировки и переезд",
+        "Текущий фокус: FullStack + DevOps развитие",
+        "Полная/частичная занятость",
       ],
     },
     about: {
       title: "Позиционирование",
-      p1: "Профиль без завышения: уверенный Middle backend-инженер с сильной практикой в продовой разработке и сопровождении собственных сервисов.",
-      p2: "DevOps-часть практическая: Linux, Nginx, SSL, DNS, UFW, Docker/Compose, базовый опыт K8s/werf и observability-стека. K8s и мониторинг использовались в формате внедрения и развертывания, без заявления глубокой SRE-экспертизы.",
+      p1: "Уверенный Middle+ backend-инженер с сильной практикой в продовой разработке и сопровождении собственных сервисов.",
+      p2: "Практическая DevOps-часть: Linux, Nginx, SSL, DNS, UFW, Docker/Compose, базовый опыт K8s/werf и observability-стека. K8s и мониторинг использовались в формате внедрения и развертывания, без глубокой SRE-экспертизы.",
     },
     skills: {
       title: "Skill Matrix",
@@ -70,14 +70,14 @@ const i18n = {
       facts: [
         "Saint Petersburg",
         "Date of Birth: 1994-11-04 (31)",
-        "Current focus: Backend + DevOps growth",
-        "Full-time, open to business trips and relocation",
+        "Current focus: FullStack + DevOps growth",
+        "Full-time / part-time",
       ],
     },
     about: {
       title: "Positioning",
-      p1: "No inflated title: strong Middle backend engineer with deep practical experience in production development and support of personal products.",
-      p2: "DevOps scope is practical: Linux, Nginx, SSL, DNS, UFW, Docker/Compose, foundational K8s/werf and observability stack. Kubernetes and monitoring were used in deployment and implementation scenarios, not framed as deep SRE expertise.",
+      p1: "Confident Middle+ backend engineer with strong practical experience in production development and support of personal services.",
+      p2: "Practical DevOps scope: Linux, Nginx, SSL, DNS, UFW, Docker/Compose, foundational K8s/werf and observability stack. Kubernetes and monitoring were used in implementation and deployment scenarios, without deep SRE expertise.",
     },
     skills: {
       title: "Skill Matrix",
@@ -552,8 +552,20 @@ const contacts = [
   },
 ];
 
-let currentLang = "ru";
+const LANG_STORAGE_KEY = "resume-lang-v2";
+let currentLang = "en";
 let sectionObserver = null;
+
+function updateAnchorOffset() {
+  const topbar = document.querySelector(".topbar");
+  if (!topbar) {
+    return;
+  }
+  const styles = window.getComputedStyle(topbar);
+  const stickyTop = parseFloat(styles.top) || 0;
+  const offset = Math.ceil(topbar.offsetHeight + stickyTop + 14);
+  document.documentElement.style.setProperty("--anchor-offset", `${offset}px`);
+}
 
 function setPageTitle(lang) {
   document.title =
@@ -637,10 +649,10 @@ function renderExperience(lang) {
 function renderProjects(lang) {
   const node = document.getElementById("projects-accordion");
   node.innerHTML = "";
-  projects.forEach((project, idx) => {
+  projects.forEach((project) => {
     const details = document.createElement("details");
     details.className = "project-item";
-    if (idx === 0) details.open = true;
+    details.open = true;
     const stack = project.stack.map((s) => `<span>${s}</span>`).join("");
     details.innerHTML = `
       <summary>
@@ -705,7 +717,7 @@ function renderContacts(lang) {
 
 function applyLanguage(lang) {
   currentLang = lang;
-  localStorage.setItem("resume-lang", lang);
+  localStorage.setItem(LANG_STORAGE_KEY, lang);
   document.querySelectorAll("[data-lang-btn]").forEach((btn) => {
     btn.classList.toggle("is-active", btn.dataset.langBtn === lang);
   });
@@ -717,41 +729,24 @@ function applyLanguage(lang) {
   renderInterests(lang);
   renderContacts(lang);
   setPageTitle(lang);
+  updateAnchorOffset();
 }
 
 function setupRevealObserver() {
   const nodes = [...document.querySelectorAll(".reveal")];
-  if (!("IntersectionObserver" in window)) {
+  // Keep a lightweight entry animation but never hide page content below the fold.
+  requestAnimationFrame(() => {
     nodes.forEach((node) => node.classList.add("is-visible"));
-    return;
-  }
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    {
-      threshold: 0.16,
-      rootMargin: "0px 0px -6% 0px",
-    }
-  );
-
-  nodes.forEach((node) => observer.observe(node));
+  });
 }
 
 function setupActiveNav() {
   const links = [...document.querySelectorAll("[data-nav-link]")];
+  const brandLink = document.querySelector("[data-brand-link]");
   const linkMap = new Map(
     links.map((link) => [link.getAttribute("href").slice(1), link])
   );
-  const sections = [...document.querySelectorAll(".observed-section[id]")].filter(
-    (section) => linkMap.has(section.id)
-  );
+  const sections = [...document.querySelectorAll(".observed-section[id]")];
 
   const setActive = (id) => {
     links.forEach((link) => {
@@ -763,6 +758,15 @@ function setupActiveNav() {
         link.removeAttribute("aria-current");
       }
     });
+    if (brandLink) {
+      const brandActive = id === "top";
+      brandLink.classList.toggle("is-active", brandActive);
+      if (brandActive) {
+        brandLink.setAttribute("aria-current", "page");
+      } else {
+        brandLink.removeAttribute("aria-current");
+      }
+    }
   };
 
   links.forEach((link) => {
@@ -772,7 +776,13 @@ function setupActiveNav() {
     });
   });
 
-  setActive("about");
+  if (brandLink) {
+    brandLink.addEventListener("click", () => {
+      setActive("top");
+    });
+  }
+
+  setActive("top");
 
   if (!("IntersectionObserver" in window)) {
     return;
@@ -799,7 +809,7 @@ function setupActiveNav() {
     },
     {
       threshold: [0.16, 0.3, 0.5, 0.75],
-      rootMargin: "-22% 0px -58% 0px",
+      rootMargin: "-22% 0px -50% 0px",
     }
   );
 
@@ -807,8 +817,8 @@ function setupActiveNav() {
 }
 
 function init() {
-  const preferred = localStorage.getItem("resume-lang");
-  const lang = preferred === "en" ? "en" : "ru";
+  const preferred = localStorage.getItem(LANG_STORAGE_KEY);
+  const lang = preferred === "ru" || preferred === "en" ? preferred : "en";
 
   document.querySelectorAll("[data-lang-btn]").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -816,8 +826,10 @@ function init() {
     });
   });
 
+  window.addEventListener("resize", updateAnchorOffset);
   setupRevealObserver();
   setupActiveNav();
+  updateAnchorOffset();
   applyLanguage(lang);
 }
 

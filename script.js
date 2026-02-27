@@ -50,6 +50,7 @@ const i18n = {
       period: "Период",
       level: "Уровень",
       architecture: "Архитектурный срез",
+      openProject: "Открыть проект",
     },
     footer: {
       text: "Одностраничное резюме для интервью-процесса. Целевой хостинг: GitHub Pages.",
@@ -106,6 +107,7 @@ const i18n = {
       period: "Period",
       level: "Level",
       architecture: "Architecture snapshot",
+      openProject: "Open project",
     },
     footer: {
       text: "Single-page resume for interview flow. Hosting target: GitHub Pages.",
@@ -276,41 +278,10 @@ const experience = [
 
 const projects = [
   {
-    name: "BoltFather",
-    period: { ru: "02.2024 — по н.в.", en: "Feb 2024 — Present" },
-    stack: ["FastAPI", "aiogram", "PostgreSQL", "Redis", "Docker Compose", "GitHub Actions", "Prometheus", "Grafana", "Loki"],
-    contribution: {
-      ru: "Переписал проект с нуля; веду backend, бота, инфраструктурную часть и администрирование.",
-      en: "Rebuilt the project from scratch; continue handling backend, bot, infrastructure, and operations.",
-    },
-    result: {
-      ru: "Сервис стабильно работает в production с мониторингом, логированием и предсказуемым деплоем.",
-      en: "The service runs stably in production with monitoring, logging, and predictable deployments.",
-    },
-    architecture: {
-      ru: [
-        "Telegram Users",
-        "  -> Bot Service (aiogram)",
-        "     -> Backend API (FastAPI)",
-        "        -> PostgreSQL",
-        "        -> Redis",
-        "        -> Scheduler jobs (APScheduler)",
-        "Metrics/Logs -> Prometheus + Loki -> Grafana",
-      ].join("\n"),
-      en: [
-        "Telegram Users",
-        "  -> Bot Service (aiogram)",
-        "     -> Backend API (FastAPI)",
-        "        -> PostgreSQL",
-        "        -> Redis",
-        "        -> Scheduler jobs (APScheduler)",
-        "Metrics/Logs -> Prometheus + Loki -> Grafana",
-      ].join("\n"),
-    },
-  },
-  {
     name: "Deliveries",
     period: { ru: "01.2025 — по н.в.", en: "Jan 2025 — Present" },
+    url: "https://logist.lsdrv.com/demo/L6ora9mIVNxHjap8gVmyo5_mseuMOrvZ",
+    linkLabel: { ru: "Открыть демо", en: "Open demo" },
     stack: ["FastAPI", "PostgreSQL", "PostGIS", "React", "TypeScript", "Docker", "GitHub Actions", "OSRM", "OpenAI API"],
     contribution: {
       ru: "Индивидуальная разработка backend и интеграция LLM-функций; использование Cursor/Codex в разработке.",
@@ -342,12 +313,49 @@ const projects = [
     },
   },
   {
-    name: "user-balances",
+    name: "BoltFather",
+    period: { ru: "02.2024 — по н.в.", en: "Feb 2024 — Present" },
+    url: "https://boltfather.com/",
+    linkLabel: { ru: "Открыть сайт", en: "Open website" },
+    stack: ["FastAPI", "aiogram", "PostgreSQL", "Redis", "Docker Compose", "GitHub Actions", "Prometheus", "Grafana", "Loki"],
+    contribution: {
+      ru: "Переписал проект с нуля; веду backend, бота, инфраструктурную часть и администрирование.",
+      en: "Rebuilt the project from scratch; continue handling backend, bot, infrastructure, and operations.",
+    },
+    result: {
+      ru: "Сервис стабильно работает в production с мониторингом, логированием и предсказуемым деплоем.",
+      en: "The service runs stably in production with monitoring, logging, and predictable deployments.",
+    },
+    architecture: {
+      ru: [
+        "Telegram Users",
+        "  -> Bot Service (aiogram)",
+        "     -> Backend API (FastAPI)",
+        "        -> PostgreSQL",
+        "        -> Redis",
+        "        -> Scheduler jobs (APScheduler)",
+        "Metrics/Logs -> Prometheus + Loki -> Grafana",
+      ].join("\n"),
+      en: [
+        "Telegram Users",
+        "  -> Bot Service (aiogram)",
+        "     -> Backend API (FastAPI)",
+        "        -> PostgreSQL",
+        "        -> Redis",
+        "        -> Scheduler jobs (APScheduler)",
+        "Metrics/Logs -> Prometheus + Loki -> Grafana",
+      ].join("\n"),
+    },
+  },
+  {
+    name: "User Balances",
     period: { ru: "02.2025 — 07.2025", en: "Feb 2025 — Jul 2025" },
+    url: "https://palette.finance/",
+    linkLabel: { ru: "Открыть сайт", en: "Open website" },
     stack: ["FastAPI", "PostgreSQL", "Redis", "RabbitMQ", "taskiq-aio-pika", "Alembic", "WebSockets", "Docker", "werf"],
     contribution: {
-      ru: "Индивидуальная реализация многосервисной backend-архитектуры со сложной структурой БД и фоновыми процессами.",
-      en: "Individual implementation of a multi-service backend architecture with complex data model and background processing.",
+      ru: "Мой вклад только backend: многосервисная backend-архитектура со сложной структурой БД и фоновыми процессами.",
+      en: "Backend contribution only: multi-service backend architecture with complex data model and background processing.",
     },
     result: {
       ru: "Собран масштабируемый pipeline обработки on-chain и сервисных данных.",
@@ -375,8 +383,9 @@ const projects = [
     },
   },
   {
-    name: "scale_api",
+    name: "Scale API",
     period: { ru: "03.2025", en: "Mar 2025" },
+    status: { ru: "Проект закрыт", en: "Project closed" },
     stack: ["FastAPI", "PostgreSQL", "SQLAlchemy", "Alembic", "Redis", "WebSockets", "Docker"],
     contribution: {
       ru: "Индивидуальная разработка API и фоновых циклов сбора staking/on-chain данных.",
@@ -408,6 +417,7 @@ const projects = [
   {
     name: "Printly3D",
     period: { ru: "08.2025 — 11.2025", en: "Aug 2025 — Nov 2025" },
+    status: { ru: "Проект закрыт", en: "Project closed" },
     stack: ["Python", "aiogram", "PostgreSQL", "SQLAlchemy", "Alembic", "Docker"],
     contribution: {
       ru: "Индивидуальная разработка Telegram-бота и backend-части.",
@@ -437,8 +447,10 @@ const projects = [
     },
   },
   {
-    name: "token_price",
+    name: "Token Prices",
     period: { ru: "11.2024 — по н.в.", en: "Nov 2024 — Present" },
+    url: "https://t.me/addlist/HVmQjxs0Pz8wMTUy",
+    linkLabel: { ru: "Открыть Telegram", en: "Open Telegram" },
     stack: ["aiogram", "Redis", "pytonapi", "pytoniq", "TON SDK", "Docker"],
     contribution: {
       ru: "Индивидуальная разработка и поддержка сервиса уведомлений по рынку токенов.",
@@ -466,8 +478,9 @@ const projects = [
     },
   },
   {
-    name: "fanton_rent_bot",
+    name: "Fanton Rent",
     period: { ru: "04.2025 — 10.2025", en: "Apr 2025 — Oct 2025" },
+    status: { ru: "Проект закрыт", en: "Project closed" },
     stack: ["Python", "aiogram", "aiohttp", "Redis", "pytonapi", "Docker", "GitHub Actions"],
     contribution: {
       ru: "Индивидуальная разработка бота для аренды игровых активов.",
@@ -654,9 +667,18 @@ function renderProjects(lang) {
     details.className = "project-item";
     details.open = true;
     const stack = project.stack.map((s) => `<span>${s}</span>`).join("");
+    const badgeHtml = project.status
+      ? `<span class="project-status-badge">${project.status[lang]}</span>`
+      : "";
+    const linkHtml = project.url
+      ? `<p class="project-linkline"><a class="project-link" href="${project.url}" target="_blank" rel="noreferrer">${project.linkLabel?.[lang] || i18n[lang].labels.openProject}</a></p>`
+      : "";
     details.innerHTML = `
       <summary>
-        <strong>${project.name}</strong>
+        <span class="summary-left">
+          <strong>${project.name}</strong>
+          ${badgeHtml}
+        </span>
         <span class="summary-right">
           <span>${project.period[lang]}</span>
           <i class="summary-chevron" aria-hidden="true"></i>
@@ -664,6 +686,7 @@ function renderProjects(lang) {
       </summary>
       <div class="project-body">
         <p class="project-meta"><strong>${i18n[lang].labels.period}:</strong> ${project.period[lang]}</p>
+        ${linkHtml}
         <p><strong>${i18n[lang].labels.stack}:</strong></p>
         <div class="stack">${stack}</div>
         <p class="project-contrib"><strong>${i18n[lang].labels.contribution}:</strong> ${project.contribution[lang]}</p>

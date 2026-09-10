@@ -1,0 +1,335 @@
+@page {
+  size: A4;
+  margin: 11mm 10mm;
+}
+
+* {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+html,
+body {
+  background: #ffffff !important;
+  color: #111827 !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-size: 9.4pt;
+  line-height: 1.25;
+}
+
+a {
+  color: #111827 !important;
+  text-decoration: none;
+}
+
+.skip-link,
+.site-header,
+.site-nav,
+.header-actions,
+.back-to-top,
+.contacts-section,
+.site-footer,
+.anchor-alias {
+  display: none !important;
+}
+
+.resume-page {
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.resume-page {
+  display: block;
+  padding: 0;
+}
+
+.hero,
+.employment-panel,
+.project-card,
+.case-card,
+.skill-group,
+.text-panel,
+.contacts-section > div,
+.other-projects {
+  border: 1px solid #d1d5db;
+  border-radius: 0;
+  background: transparent !important;
+}
+
+.hero {
+  padding: 0 0 3mm;
+  border: 0;
+}
+
+.hero-main,
+.employment-head,
+.content-section,
+.case-grid,
+.project-grid,
+.skill-grid,
+.contact-grid {
+  display: block;
+}
+
+h1 {
+  margin: 0 0 1mm;
+  font-size: 19pt;
+  line-height: 1.02;
+}
+
+h2 {
+  margin: 0 0 1.5mm;
+  font-size: 12pt;
+  line-height: 1.12;
+  break-after: avoid;
+}
+
+h3 {
+  margin: 0 0 1mm;
+  font-size: 9.8pt;
+  line-height: 1.15;
+  break-after: avoid;
+}
+
+p {
+  margin-bottom: 1.5mm;
+}
+
+.headline {
+  margin-bottom: 1.5mm;
+  color: #0f766e;
+  font-size: 11pt;
+}
+
+.summary {
+  max-width: none;
+  margin-bottom: 1.5mm;
+}
+
+.hero-contacts,
+.contact-grid,
+.meta-strip,
+.stack-list,
+.skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5mm 3mm;
+  margin: 1mm 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hero-contacts li,
+.contact-grid li {
+  display: inline;
+}
+
+.hero-contacts span,
+.contact-grid span {
+  display: inline;
+  color: #4b5563;
+  font-size: 8pt;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.hero-contacts span::after,
+.contact-grid span::after {
+  content: ": ";
+}
+
+.hero-contacts a,
+.contact-grid a,
+.hero-contacts strong,
+.contact-grid strong {
+  font-size: 9pt;
+  font-weight: 600;
+}
+
+.availability {
+  margin: 1mm 0 0;
+  color: #374151;
+  font-size: 8.6pt;
+}
+
+.meta-strip li,
+.status,
+.stack-list li,
+.skill-list li {
+  border: 0;
+  background: transparent !important;
+  padding: 0;
+  color: #374151;
+  font-size: 8pt;
+}
+
+.meta-strip li::before,
+.stack-list li::before,
+.skill-list li::before {
+  content: "· ";
+}
+
+.content-section {
+  break-inside: auto;
+  page-break-inside: auto;
+  margin-top: 3.5mm;
+}
+
+#projects {
+  break-before: page;
+}
+
+.section-heading {
+  break-inside: avoid;
+}
+
+.hero {
+  position: static;
+}
+
+.link-row a[href^="https://"]::after {
+  content: " (" attr(href) ")";
+  font-size: 8pt;
+  font-weight: 400;
+}
+
+.section-label {
+  display: none !important;
+}
+
+.section-label span {
+  color: #6b7280;
+}
+
+.employment-panel,
+.text-panel,
+.contacts-section > div,
+.other-projects {
+  padding: 0;
+  border: 0;
+}
+
+.company,
+.department,
+.period,
+.overview,
+.project-description,
+.skill-group p,
+.text-panel p,
+.site-footer,
+.bullet-list li {
+  color: #374151;
+}
+
+.period {
+  margin-bottom: 1.5mm;
+  text-align: left;
+  white-space: normal;
+}
+
+.overview {
+  margin-bottom: 1.5mm;
+}
+
+.case-card,
+.project-card,
+.skill-group {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-top: 2mm;
+  padding: 0;
+  border: 0;
+}
+
+.case-card + .case-card,
+.project-card + .project-card,
+.skill-group + .skill-group,
+.other-project + .other-project {
+  padding-top: 2mm;
+  border-top: 1px solid #e5e7eb;
+}
+
+.case-head,
+.project-head {
+  display: block;
+}
+
+.status {
+  display: inline;
+}
+
+.bullet-list {
+  margin: 0.8mm 0 0;
+  padding-left: 4mm;
+}
+
+.bullet-list li {
+  margin: 0.55mm 0;
+}
+
+.automation-note {
+  margin: 1.5mm 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent !important;
+  color: #374151;
+}
+
+.section-heading {
+  margin-bottom: 1mm;
+  break-after: avoid;
+}
+
+.link-row {
+  display: block;
+  margin: 1mm 0 0;
+}
+
+.link-row a + a {
+  margin-left: 4mm;
+}
+
+.other-projects {
+  break-inside: auto;
+}
+
+.other-projects summary {
+  display: block;
+  cursor: default;
+}
+
+.other-projects summary span + span {
+  display: none;
+}
+
+.other-project-list {
+  display: block;
+  margin-top: 1mm;
+}
+
+.other-project {
+  display: block;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-top: 1mm;
+}
+
+.other-project .stack-list {
+  gap: 0.8mm 2mm;
+  margin-top: 0.4mm;
+}
+
+.other-project .stack-list li {
+  font-size: 7.4pt;
+}
+
+.other-project p,
+.small-meta {
+  margin-bottom: 0.8mm;
+  color: #4b5563;
+}
+
+.site-footer {
+  padding: 5mm 0 0;
+  font-size: 8.5pt;
+}

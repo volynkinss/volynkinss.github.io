@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="{{lang}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{title}}</title>
+  <meta name="description" content="{{description}}">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="color-scheme" content="light">
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="{{title}}">
+  <meta property="og:description" content="{{description}}">
+  <meta property="og:locale" content="{{ogLocale}}">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{title}}">
+  <meta name="twitter:description" content="{{description}}">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="print.css" media="print">
+  <script id="structured-data" type="application/ld+json">{{structuredData}}</script>
+</head>
+<body data-lang="{{lang}}">
+  <div id="resume-app">{{appHtml}}</div>
+  <script type="module" src="script.js"></script>
+</body>
+</html>

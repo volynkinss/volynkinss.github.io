@@ -21,6 +21,9 @@ const DEFAULT_UI = {
     contacts: "Contacts",
     projectLink: "Open link",
     moreProjects: "More projects",
+    architectureCode: "Code",
+    architectureServices: "Services",
+    architectureInfrastructure: "Infrastructure",
   },
   ru: {
     skip: "Перейти к резюме",
@@ -41,6 +44,9 @@ const DEFAULT_UI = {
     contacts: "Контакты",
     projectLink: "Открыть ссылку",
     moreProjects: "Ещё проекты",
+    architectureCode: "Код",
+    architectureServices: "Сервисы",
+    architectureInfrastructure: "Инфраструктура",
   },
 };
 
@@ -379,7 +385,7 @@ function renderHeader(page, lang, sections) {
   return `
     <header class="site-header">
       <a class="brand" href="#top" aria-label="${escapeAttr(ui.backToTop)}">
-        <span class="brand-mark" aria-hidden="true">SV</span>
+        <span class="brand-mark" aria-hidden="true">sv<span>.</span></span>
         <span class="brand-copy">
           <span class="brand-name">${escapeHtml(page.name || "Resume")}</span>
           ${page.headline ? `<span class="brand-role">${escapeHtml(page.headline)}</span>` : ""}
@@ -415,11 +421,31 @@ function renderHero(page) {
         <div class="hero-copy">
           ${page.name ? `<h1 id="hero-name">${escapeHtml(page.name)}</h1>` : `<h1 id="hero-name">Resume</h1>`}
           ${page.headline ? `<p class="headline">${escapeHtml(page.headline)}</p>` : ""}
-          ${page.summary ? `<p class="summary">${escapeHtml(page.summary)}</p>` : ""}
+          ${metaItems.length ? `<ul class="meta-strip">${metaItems.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>` : ""}
         </div>
-        ${renderContactList(page, "hero-contacts")}
+        <div class="architecture-scene" aria-hidden="true">
+          <div class="architecture-object">
+            <div class="architecture-shadow"></div>
+            <div class="architecture-layer architecture-base">
+              <span class="architecture-number">03</span>
+              <span class="architecture-label">${escapeHtml(page.ui.architectureInfrastructure)}</span>
+              <div class="architecture-rails"><i></i><i></i><i></i></div>
+            </div>
+            <div class="architecture-layer architecture-middle">
+              <span class="architecture-number">02</span>
+              <span class="architecture-label">${escapeHtml(page.ui.architectureServices)}</span>
+              <div class="architecture-blocks"><i></i><i></i><i></i></div>
+            </div>
+            <div class="architecture-layer architecture-top">
+              <span class="architecture-number">01</span>
+              <span class="architecture-label">${escapeHtml(page.ui.architectureCode)}</span>
+              <span class="architecture-code">{ }</span>
+            </div>
+          </div>
+        </div>
       </div>
-      ${metaItems.length ? `<ul class="meta-strip">${metaItems.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>` : ""}
+      ${page.summary ? `<p class="summary">${escapeHtml(page.summary)}</p>` : ""}
+      ${renderContactList(page, "hero-contacts")}
       ${page.availability ? `<p class="availability">${escapeHtml(page.availability)}</p>` : ""}
     </section>
   `;

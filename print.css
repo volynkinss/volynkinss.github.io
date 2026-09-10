@@ -33,6 +33,10 @@ a {
   display: none !important;
 }
 
+.architecture-scene {
+  display: none !important;
+}
+
 .resume-page {
   width: 100% !important;
   margin: 0 !important;
@@ -72,6 +76,7 @@ a {
 }
 
 h1 {
+  max-width: none;
   margin: 0 0 1mm;
   font-size: 19pt;
   line-height: 1.02;
@@ -103,7 +108,10 @@ p {
 
 .summary {
   max-width: none;
+  margin-top: 0;
   margin-bottom: 1.5mm;
+  font-size: inherit;
+  line-height: inherit;
 }
 
 .hero-contacts,
@@ -117,6 +125,10 @@ p {
   margin: 1mm 0 0;
   padding: 0;
   list-style: none;
+}
+
+.hero-contacts {
+  border: 0;
 }
 
 .hero-contacts li,

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { resume } from '../resume-data.mjs';
-import { pickInitialLanguage, getLanguageFromUrl, buildLanguageHref, renderDocument, createMetadata, normalizeResume } from '../renderer.mjs';
+import { pickInitialLanguage, getLanguageFromUrl, buildLanguageHref, renderApp, renderDocument, createMetadata, normalizeResume } from '../renderer.mjs';
 
 test('explicit language takes priority over stored preference; invalid values are safe', () => {
   assert.equal(pickInitialLanguage({ urlLang: 'ru', storedLang: 'en' }), 'ru');
@@ -55,4 +55,32 @@ test('generated English HTML matches the current bilingual source', async () => 
   const template = await readFile(new URL('../index.template.html', import.meta.url), 'utf8');
   const generated = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   assert.equal(generated, `${renderDocument(resume, 'en', template)}\n`);
+});
+
+test('PDF downloads follow the selected language and remain relative to the site', () => {
+  for (const lang of ['ru', 'en']) {
+    const filename = `Sergey_Volynkin_CV_${lang.toUpperCase()}.pdf`;
+    const html = renderApp(resume, lang);
+    assert.ok(html.includes(`href="./downloads/${filename}" download="${filename}"`));
+    assert.ok(html.includes('data-print'), 'native print remains available');
+  }
+});
+
+test('mobile summary keeps the complete source and disclosure state through re-rendering', () => {
+  for (const lang of ['ru', 'en']) {
+    assert.ok(resume[lang].summary.startsWith(resume[lang].summaryIntro));
+    const html = renderApp(resume, lang, { openDisclosures: ['profile-summary', 'other-projects'] });
+    assert.match(html, /data-disclosure="profile-summary" open/);
+    assert.match(html, /data-disclosure="other-projects" open/);
+    assert.ok(html.includes(resume[lang].summary));
+  }
+});
+
+test('a missing or stale short introduction falls back to the full summary', () => {
+  for (const summaryIntro of ['', 'An outdated introduction.']) {
+    const changed = { ...resume, en: { ...resume.en, summaryIntro } };
+    const html = renderApp(changed, 'en');
+    assert.ok(html.includes(resume.en.summary));
+    assert.ok(!html.includes('data-disclosure="profile-summary"'));
+  }
 });

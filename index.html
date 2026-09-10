@@ -66,7 +66,10 @@
             </button>
 
         </div>
-        <button class="print-button" type="button" data-print>Print / Save PDF</button>
+        <div class="document-actions">
+          <a class="download-button" href="./downloads/Sergey_Volynkin_CV_EN.pdf" download="Sergey_Volynkin_CV_EN.pdf" aria-label="Download resume in English (PDF)">Download PDF</a>
+          <button class="print-button" type="button" data-print>Print</button>
+        </div>
       </div>
     </header>
 
@@ -101,7 +104,14 @@
           </div>
         </div>
       </div>
-      <p class="summary">I work across software development and infrastructure: adapt open-source products, build services and operate them on Linux. My work combines Python development, changes to existing Go codebases, Docker deployment, databases, CI/CD, monitoring and identity integrations. I take changes from source code through integration to production support.</p>
+      <p class="summary summary-desktop">I work across software development and infrastructure: adapt open-source products, build services and operate them on Linux. My work combines Python development, changes to existing Go codebases, Docker deployment, databases, CI/CD, monitoring and identity integrations. I take changes from source code through integration to production support.</p>
+    <div class="summary-mobile">
+      <p class="summary">I work across software development and infrastructure: adapt open-source products, build services and operate them on Linux.</p>
+      <details class="summary-details" data-disclosure="profile-summary">
+        <summary>Read more</summary>
+        <p>My work combines Python development, changes to existing Go codebases, Docker deployment, databases, CI/CD, monitoring and identity integrations. I take changes from source code through integration to production support.</p>
+      </details>
+    </div>
 
     <ul class="hero-contacts">
 
@@ -221,7 +231,9 @@
     <article id="project-boltfather" class="project-card">
       <div class="project-head">
         <h3>BoltFather</h3>
-        <p>Co-owner &amp; Backend / Platform Engineer · 25% ownership · Feb 2024 — Present · Production</p>
+        <p class="project-role">Co-owner &amp; Backend / Platform Engineer · 25% ownership</p>
+        <p class="project-period">Feb 2024 — Present</p>
+        <span class="status project-status">Production</span>
       </div>
       <p class="project-description">Telegram community access and subscription service with TON integrations.</p>
       <ul class="bullet-list"><li>Rebuilt the project from scratch and continue to own backend development, the bot layer, infrastructure, deployment and operations.</li><li>Automated delivery with GitHub Actions, GHCR images, SSH deployment, Alembic migrations and Docker Compose.</li><li>Deployed Prometheus, Grafana and Loki/Promtail for application metrics and Docker logs; added operational reporting backed by PostgreSQL.</li></ul>
@@ -232,7 +244,9 @@
     <article id="project-kvartirka" class="project-card">
       <div class="project-head">
         <h3>Kvartirka</h3>
-        <p>Software development &amp; deployment · In development</p>
+        <p class="project-role">Software development &amp; deployment</p>
+
+        <span class="status project-status">In development</span>
       </div>
       <p class="project-description">A workspace for managing rental properties, bookings and financial records.</p>
       <ul class="bullet-list"><li>Develop a NestJS/Fastify API and Next.js interface with Prisma/PostgreSQL and Redis: properties, bookings, payments, expenses and documents.</li><li>Build portfolio financial workflows and automate Docker Compose deployment, health checks and smoke validation through GitHub Actions.</li></ul>
@@ -243,7 +257,9 @@
     <article id="project-supplier-parser" class="project-card">
       <div class="project-head">
         <h3>Supplier Price Parser</h3>
-        <p>Software development &amp; deployment</p>
+        <p class="project-role">Software development &amp; deployment</p>
+
+
       </div>
       <p class="project-description">A service for collecting supplier price lists and preparing structured data for review and ordering.</p>
       <ul class="bullet-list"><li>Build Telegram/XLSX ingestion, a protected operator workspace, catalog matching and order preparation in FastAPI.</li><li>Preserve source snapshots and audit history in PostgreSQL; implement background jobs and advisory LLM candidate ranking with explicit operator confirmation.</li></ul>
@@ -254,7 +270,9 @@
     <article id="project-deliveries" class="project-card">
       <div class="project-head">
         <h3>Deliveries</h3>
-        <p>Software development &amp; deployment · Jan 2025 — Present</p>
+        <p class="project-role">Software development &amp; deployment</p>
+        <p class="project-period">Jan 2025 — Present</p>
+
       </div>
       <p class="project-description">Delivery planning with geographic zones, address processing and route calculation.</p>
       <ul class="bullet-list"><li>Build a FastAPI/PostGIS backend and React map interface for address imports, geocoding, courier workflows and access control.</li><li>Integrate OSRM routing, H3 zone recommendations for review and LLM fallback parsing of unstructured delivery text; maintain Docker and CI/CD workflows.</li></ul>

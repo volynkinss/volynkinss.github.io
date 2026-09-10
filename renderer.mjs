@@ -7,6 +7,9 @@ const DEFAULT_UI = {
     navLabel: "Resume sections",
     languageLabel: "Language",
     print: "Print",
+    downloadPdf: "Download PDF",
+    downloadPdfLabel: "Download resume in English (PDF)",
+    summaryMore: "Read more",
     backToTop: "Back to top",
     email: "Email",
     phone: "Phone",
@@ -30,6 +33,9 @@ const DEFAULT_UI = {
     navLabel: "Разделы резюме",
     languageLabel: "Язык",
     print: "Печать",
+    downloadPdf: "Скачать PDF",
+    downloadPdfLabel: "Скачать резюме на русском языке (PDF)",
+    summaryMore: "Подробнее",
     backToTop: "Наверх",
     email: "Email",
     phone: "Телефон",
@@ -163,7 +169,7 @@ export function renderApp(rawResume, lang = DEFAULT_LANGUAGE, options = {}) {
     <a class="skip-link" href="#top">${escapeHtml(ui.skip)}</a>
     ${renderHeader(page, activeLang, sections)}
     <main id="top" class="resume-page" tabindex="-1">
-      ${renderHero(page)}
+      ${renderHero(page, activeDisclosures)}
       ${renderEmployment(page, "01")}
       ${renderProjects(page, "02")}
       ${renderOtherProjects(page, "03", activeDisclosures)}
@@ -266,6 +272,7 @@ function normalizePage(page = {}, lang = DEFAULT_LANGUAGE) {
     location: text(page.location),
     availability: text(page.availability),
     summary: text(page.summary),
+    summaryIntro: text(page.summaryIntro),
     metaDescription: text(page.metaDescription),
     ui,
     contacts: array(page.contacts).map(normalizeContact).filter((contact) => contact.value || contact.href),
@@ -402,13 +409,16 @@ function renderHeader(page, lang, sections) {
             </button>
           `).join("")}
         </div>
-        <button class="print-button" type="button" data-print>${escapeHtml(ui.print)}</button>
+        <div class="document-actions">
+          <a class="download-button" href="./downloads/Sergey_Volynkin_CV_${lang.toUpperCase()}.pdf" download="Sergey_Volynkin_CV_${lang.toUpperCase()}.pdf" aria-label="${escapeAttr(ui.downloadPdfLabel)}">${escapeHtml(ui.downloadPdf)}</a>
+          <button class="print-button" type="button" data-print>${escapeHtml(ui.print)}</button>
+        </div>
       </div>
     </header>
   `;
 }
 
-function renderHero(page) {
+function renderHero(page, activeDisclosures) {
   const metaItems = [
     page.location,
     page.languages,
@@ -444,11 +454,30 @@ function renderHero(page) {
           </div>
         </div>
       </div>
-      ${page.summary ? `<p class="summary">${escapeHtml(page.summary)}</p>` : ""}
+      ${renderSummary(page, activeDisclosures)}
       ${renderContactList(page, "hero-contacts")}
       ${page.availability ? `<p class="availability">${escapeHtml(page.availability)}</p>` : ""}
     </section>
   `;
+}
+
+function renderSummary(page, activeDisclosures) {
+  if (!page.summary) return "";
+  const fullSummary = `<p class="summary summary-desktop">${escapeHtml(page.summary)}</p>`;
+  const intro = page.summaryIntro;
+  if (!intro || !page.summary.startsWith(intro) || intro === page.summary) {
+    return `<p class="summary">${escapeHtml(page.summary)}</p>`;
+  }
+  const remainder = page.summary.slice(intro.length).trimStart();
+  const open = activeDisclosures.has("profile-summary") ? " open" : "";
+  return `${fullSummary}
+    <div class="summary-mobile">
+      <p class="summary">${escapeHtml(intro)}</p>
+      <details class="summary-details" data-disclosure="profile-summary"${open}>
+        <summary>${escapeHtml(page.ui.summaryMore)}</summary>
+        <p>${escapeHtml(remainder)}</p>
+      </details>
+    </div>`;
 }
 
 function renderEmployment(page, number) {
@@ -512,12 +541,13 @@ function renderProjects(page, number) {
 }
 
 function renderProject(project) {
-  const meta = [project.role, project.period, project.status].filter(Boolean);
   return `
     <article id="project-${escapeAttr(project.id)}" class="project-card">
       <div class="project-head">
         ${project.title ? `<h3>${escapeHtml(project.title)}</h3>` : ""}
-        ${meta.length ? `<p>${meta.map(escapeHtml).join(" · ")}</p>` : ""}
+        ${project.role ? `<p class="project-role">${escapeHtml(project.role)}</p>` : ""}
+        ${project.period ? `<p class="project-period">${escapeHtml(project.period)}</p>` : ""}
+        ${project.status ? `<span class="status project-status">${escapeHtml(project.status)}</span>` : ""}
       </div>
       ${project.description ? `<p class="project-description">${escapeHtml(project.description)}</p>` : ""}
       ${project.bullets.length ? renderBulletList(project.bullets) : ""}

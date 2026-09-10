@@ -37,6 +37,14 @@ a {
   display: none !important;
 }
 
+.summary-mobile {
+  display: none !important;
+}
+
+.summary-desktop {
+  display: block !important;
+}
+
 .resume-page {
   width: 100% !important;
   margin: 0 !important;
@@ -264,6 +272,21 @@ p {
 .case-head,
 .project-head {
   display: block;
+}
+
+.project-head {
+  margin-bottom: 1mm;
+}
+
+.project-head h3 {
+  margin-bottom: 1mm;
+  font-size: 9.8pt;
+}
+
+.project-head .project-role,
+.project-head .project-period {
+  font-size: 8pt;
+  margin-bottom: 0.4mm;
 }
 
 .status {

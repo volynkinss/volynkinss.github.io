@@ -1,0 +1,14 @@
+Use case: ads-marketing
+Asset type: landscape social sharing / Open Graph cover for Sergey Volynkin's engineering resume website.
+Create ONE polished raster image, landscape approximately 1.91:1 (target 1200 x 630 or equivalent aspect ratio).
+Scene and palette: warm very light grey/sage background #f4f5f2, dark forest ink #23392f, restrained green accents #2d6854.
+Style: premium editorial engineering resume identity, clean modern sans serif typography, exceptionally strong legibility in a small link preview, generous whitespace.
+Composition: balanced left typography and right architectural sculpture. Keep text inside generous safe margins, no overlap with sculpture.
+Text on LEFT, render exactly these three text elements and no other words:
+Large two-line headline:
+"Sergey
+Volynkin"
+Clear subtitle underneath: "Software & Platform Engineer"
+Small but readable at lower left: "volynkinss.github.io"
+RIGHT: a restrained isometric sculptural stack of exactly three floating frosted glass and sage planes. Soft studio light, subtle shadows, refined architectural engineering aesthetic. Three planes suggest code, services, infrastructure through minimal etched code braces, grid, and server rails respectively; no tiny labels.
+Constraints: excellent clean typesetting; accurate spelling and punctuation; quiet high-end design. No neon, gaming, cyberpunk, people, extra slogans, badges, UI chrome, company logo, watermark, or frame.

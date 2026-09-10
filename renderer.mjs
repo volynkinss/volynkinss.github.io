@@ -5,6 +5,9 @@ const DEFAULT_UI = {
   en: {
     skip: "Skip to resume",
     navLabel: "Resume sections",
+    navExperience: "Experience",
+    navProjects: "Projects",
+    navSkills: "Skills",
     languageLabel: "Language",
     print: "Print",
     downloadPdf: "Download PDF",
@@ -31,6 +34,9 @@ const DEFAULT_UI = {
   ru: {
     skip: "Перейти к резюме",
     navLabel: "Разделы резюме",
+    navExperience: "Опыт",
+    navProjects: "Проекты",
+    navSkills: "Навыки",
     languageLabel: "Язык",
     print: "Печать",
     downloadPdf: "Скачать PDF",
@@ -158,7 +164,7 @@ export function renderDocument(rawResume, lang, template) {
 }
 
 export function renderApp(rawResume, lang = DEFAULT_LANGUAGE, options = {}) {
-  const resume = isNormalizedResume(rawResume) ? rawResume : normalizeResume(rawResume);
+  const resume = normalizeResume(rawResume);
   const activeLang = resolveLanguage(lang);
   const page = resume[activeLang];
   const ui = page.ui;
@@ -168,6 +174,7 @@ export function renderApp(rawResume, lang = DEFAULT_LANGUAGE, options = {}) {
   return `
     <a class="skip-link" href="#top">${escapeHtml(ui.skip)}</a>
     ${renderHeader(page, activeLang, sections)}
+    ${renderMobileNav(page, sections)}
     <main id="top" class="resume-page" tabindex="-1">
       ${renderHero(page, activeDisclosures)}
       ${renderEmployment(page, "01")}
@@ -399,7 +406,7 @@ function renderHeader(page, lang, sections) {
         </span>
       </a>
       <nav class="site-nav" aria-label="${escapeAttr(ui.navLabel)}">
-        ${navSections.map((section) => `<a href="#${section.id}">${escapeHtml(section.label)}</a>`).join("")}
+        ${navSections.map((section) => `<a href="#${section.id}" data-nav-section="${section.id}">${escapeHtml(section.label)}</a>`).join("")}
       </nav>
       <div class="header-actions" aria-label="${escapeAttr(ui.languageLabel)}">
         <div class="language-switch" role="group" aria-label="${escapeAttr(ui.languageLabel)}">
@@ -416,6 +423,19 @@ function renderHeader(page, lang, sections) {
       </div>
     </header>
   `;
+}
+
+function renderMobileNav(page, sections) {
+  const labels = {
+    experience: page.ui.navExperience,
+    projects: page.ui.navProjects,
+    skills: page.ui.navSkills,
+  };
+  const items = sections.filter((section) => Object.prototype.hasOwnProperty.call(labels, section.id));
+  if (!items.length) return "";
+  return `<nav class="mobile-nav" aria-label="${escapeAttr(page.ui.navLabel)}">
+    ${items.map((section) => `<a href="#${section.id}" data-nav-section="${section.id}">${escapeHtml(labels[section.id])}</a>`).join("")}
+  </nav>`;
 }
 
 function renderHero(page, activeDisclosures) {
@@ -768,10 +788,6 @@ function escapeTemplateValue(value, key) {
     return String(value);
   }
   return escapeAttr(value);
-}
-
-function isNormalizedResume(input) {
-  return Boolean(input && input.en && input.ru && input.en.ui && input.ru.ui);
 }
 
 function objectOrEmpty(value) {

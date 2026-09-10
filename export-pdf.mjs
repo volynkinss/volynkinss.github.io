@@ -118,8 +118,8 @@ async function renderPdf(browser, html, asset) {
   const page = await browser.newPage();
   try {
     await page.route("**/*", (route) => route.abort());
-    await page.setContent(html, { waitUntil: "load" });
     await page.emulateMedia({ media: "print" });
+    await page.setContent(html, { waitUntil: "load" });
     await page.evaluate(() => {
       for (const details of document.querySelectorAll("details")) {
         details.open = true;

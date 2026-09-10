@@ -84,3 +84,32 @@ test('a missing or stale short introduction falls back to the full summary', () 
     assert.ok(!html.includes('data-disclosure="profile-summary"'));
   }
 });
+
+test('mobile navigation is localized and only links to sections present in the document', () => {
+  for (const lang of ['ru', 'en']) {
+    const html = renderApp(resume, lang);
+    const mobile = html.match(/<nav class="mobile-nav"[\s\S]*?<\/nav>/)[0];
+    assert.equal([...mobile.matchAll(/<a /g)].length, 3);
+    for (const id of ['experience', 'projects', 'skills']) {
+      assert.ok(mobile.includes(`href="#${id}" data-nav-section="${id}"`));
+      assert.ok(html.includes(`id="${id}"`));
+    }
+    assert.ok(mobile.includes(lang === 'ru' ? '>Опыт<' : '>Experience<'));
+  }
+  const sparse = renderApp({ en: { name: 'Name', headline: 'Role', summary: 'Summary' } }, 'en');
+  assert.ok(!sparse.includes('class="mobile-nav"'), 'no empty mobile landmark for absent sections');
+});
+
+test('sharing metadata points to the included cover with its actual PNG dimensions', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const png = await readFile(new URL('../og.png', import.meta.url));
+  assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+  assert.ok(html.includes('property="og:image" content="https://volynkinss.github.io/og.png"'));
+  assert.ok(html.includes('name="twitter:image" content="https://volynkinss.github.io/og.png"'));
+  assert.ok(html.includes('name="twitter:card" content="summary_large_image"'));
+  assert.ok(html.includes(`property="og:image:width" content="${png.readUInt32BE(16)}"`));
+  assert.ok(html.includes(`property="og:image:height" content="${png.readUInt32BE(20)}"`));
+  assert.ok(html.includes('rel="icon" href="favicon.svg" type="image/svg+xml"'));
+  const icon = await readFile(new URL('../favicon.svg', import.meta.url), 'utf8');
+  assert.ok(icon.includes('viewBox="0 0 64 64"'));
+});

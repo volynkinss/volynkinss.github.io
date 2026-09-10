@@ -21,6 +21,8 @@ const state = {
   lang: "en",
 };
 let printOpenedDisclosures = [];
+let navigationFrame = 0;
+let navigationLinks = [];
 
 init();
 
@@ -55,6 +57,11 @@ function init() {
 
   window.addEventListener("beforeprint", openDisclosuresForPrint);
   window.addEventListener("afterprint", restoreDisclosuresAfterPrint);
+  window.addEventListener("scroll", scheduleNavigationUpdate, { passive: true });
+  window.addEventListener("resize", scheduleNavigationUpdate);
+  window.addEventListener("hashchange", scheduleNavigationUpdate);
+  root.addEventListener("toggle", scheduleNavigationUpdate, true);
+  if (document.fonts) document.fonts.ready.then(scheduleNavigationUpdate);
 }
 
 function applyLanguage(lang, options) {
@@ -69,6 +76,8 @@ function applyLanguage(lang, options) {
   document.body.dataset.lang = nextLang;
   root.innerHTML = renderApp(state.resume, nextLang, { openDisclosures });
   updateMetadata(nextLang);
+  navigationLinks = Array.from(root.querySelectorAll("[data-nav-section]"));
+  updateNavigation();
 
   if (options.persist) {
     writeStoredLanguage(nextLang);
@@ -86,6 +95,38 @@ function applyLanguage(lang, options) {
     if (button) {
       button.focus({ preventScroll: true });
     }
+  }
+}
+
+function scheduleNavigationUpdate() {
+  if (navigationFrame) return;
+  navigationFrame = window.requestAnimationFrame(() => {
+    navigationFrame = 0;
+    updateNavigation();
+  });
+}
+
+function updateNavigation() {
+  const mobile = window.matchMedia("(max-width: 620px)").matches;
+  const nav = root.querySelector(mobile ? ".mobile-nav" : ".site-nav");
+  const stickyBar = mobile ? nav : root.querySelector(".site-header");
+  const offset = (stickyBar?.getBoundingClientRect().height || 0) + 16;
+  document.documentElement.style.setProperty("--navigation-offset", `${offset}px`);
+
+  const sections = Array.from(nav?.querySelectorAll("[data-nav-section]") || [])
+    .map((link) => document.getElementById(link.dataset.navSection))
+    .filter(Boolean);
+  let current = "";
+  for (const section of sections) {
+    if (section.getBoundingClientRect().top <= offset + 1) current = section.id;
+  }
+  // Short final sections may never reach the sticky bar, even at the page end.
+  if (window.scrollY > 0 && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+    current = sections[sections.length - 1]?.id || current;
+  }
+  for (const link of navigationLinks) {
+    if (link.dataset.navSection === current) link.setAttribute("aria-current", "location");
+    else link.removeAttribute("aria-current");
   }
 }
 

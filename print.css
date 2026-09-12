@@ -42,10 +42,6 @@ a {
   display: none !important;
 }
 
-.summary-desktop {
-  display: block !important;
-}
-
 .resume-page {
   width: 100% !important;
   margin: 0 !important;
@@ -76,6 +72,7 @@ a {
 
 .hero-main,
 .employment-head,
+.role-row,
 .content-section,
 .case-grid,
 .project-grid,
@@ -101,6 +98,13 @@ h2 {
 h3 {
   margin: 0 0 1mm;
   font-size: 9.8pt;
+  line-height: 1.15;
+  break-after: avoid;
+}
+
+h4 {
+  margin: 0 0 1mm;
+  font-size: 9pt;
   line-height: 1.15;
   break-after: avoid;
 }
@@ -137,12 +141,14 @@ p {
 }
 
 .hero-contacts {
+  display: block;
   border: 0;
 }
 
 .hero-contacts li,
 .contact-grid li {
-  display: inline;
+  display: block;
+  margin-bottom: 0.7mm;
 }
 
 .hero-contacts span,
@@ -196,10 +202,6 @@ p {
   margin-top: 3.5mm;
 }
 
-#projects {
-  break-before: page;
-}
-
 .section-heading {
   break-inside: avoid;
 }
@@ -235,6 +237,7 @@ p {
 .period,
 .overview,
 .project-description,
+.project-contribution,
 .skill-group p,
 .text-panel p,
 .site-footer,
@@ -285,6 +288,7 @@ p {
 }
 
 .project-head .project-role,
+.project-head .project-category,
 .project-head .project-period {
   font-size: 8pt;
   margin-bottom: 0.4mm;
@@ -329,12 +333,22 @@ p {
   break-inside: auto;
 }
 
+details[data-disclosure] > :not(summary) {
+  display: block !important;
+}
+
+details[data-disclosure]::details-content {
+  display: contents;
+  content-visibility: visible;
+}
+
 .other-projects summary {
   display: block;
   cursor: default;
+  break-after: avoid;
 }
 
-.other-projects summary span + span {
+.other-projects summary h2 + span {
   display: none;
 }
 

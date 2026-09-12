@@ -1,26 +1,26 @@
 {
   "version": 1,
-  "sourceSha256": "e262f56de78fad7b3b9db03ba5db5483eabc9863c9449d4db304e53d4f05c8bd",
+  "sourceSha256": "b8f7c35cd33028c3eb24d788e29b8215f13429c37d713957c0e9b40f08cd8f8e",
   "sources": [
     {
       "file": "resume-data.mjs",
-      "sha256": "d3623e6114bb7e3968eaa5375f70d319fe8d7b78fed9fe2f2d809a6001b1cba9"
+      "sha256": "8d000be1ea909e78a6572b59a7505114f9abb7da92ee5b65ef4d662533920429"
     },
     {
       "file": "renderer.mjs",
-      "sha256": "d38a69c05a6c727452243b72e67d9869f930a89669ee715d4b19d0a9d03aa8bf"
+      "sha256": "3500437d3eef2ec7f608c244810720fffbb5c5e3b6e3ae062b59da5d7a80cbac"
     },
     {
       "file": "index.template.html",
-      "sha256": "682f64730afeb3453b8ea7565a86e7b7ba553ad2e7f1dee2a868263f0db57399"
+      "sha256": "661f3f309989ba1f93a3cd2e4670a1d409aca113b3f07c9da5a8f2f6530cd1a7"
     },
     {
       "file": "styles.css",
-      "sha256": "3e34e749dd6a321147f5a97098283f86e32c6305b8758a9993398fc606d9b0dd"
+      "sha256": "245ac9421dcfa7b321f3ebc501bd4f870c533fb4956721643b47e549b9b1eff6"
     },
     {
       "file": "print.css",
-      "sha256": "e88c47b82a34c3e44a37c24424efd6b3d53323bfc0f75f9b7affc3815445ebbf"
+      "sha256": "1a40383235a156aa180fe5e512d788547f51d26679fe6e8d560988b236de84fb"
     },
     {
       "file": "export-pdf.mjs",
@@ -34,13 +34,13 @@
   "pdfs": {
     "ru": {
       "file": "Sergey_Volynkin_CV_RU.pdf",
-      "sha256": "2cbeb63d1ac5a229d3ab0bf198e2efa35b8e3e971a46fed5f98bb9e3e78df590",
-      "bytes": 326551
+      "sha256": "50890b3d2c1df66ca33592a5b9015e8510f3b2d35040e82767bd1639dafbbd3c",
+      "bytes": 347283
     },
     "en": {
       "file": "Sergey_Volynkin_CV_EN.pdf",
-      "sha256": "bd8b02587a8c5540a2d15f398b4b91ebd4a4a39847a8bbf95e6f7c8a7e06ab76",
-      "bytes": 299125
+      "sha256": "a254c95db1971da10fa11bd07f8f21aea8e5ebb82cb4c5cbe530f64147b40047",
+      "bytes": 319893
     }
   }
 }

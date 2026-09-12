@@ -36,6 +36,10 @@ function init() {
   root.addEventListener("click", (event) => {
     const languageButton = event.target.closest("[data-lang-btn]");
     if (languageButton) {
+      if (shouldLetBrowserHandleLanguageLink(event, languageButton)) {
+        return;
+      }
+      event.preventDefault();
       const nextLang = resolveLanguage(languageButton.getAttribute("data-lang-btn"));
       applyLanguage(nextLang, { replace: false, persist: true, updateUrl: true, refocusLanguage: true });
       return;
@@ -59,7 +63,10 @@ function init() {
   window.addEventListener("afterprint", restoreDisclosuresAfterPrint);
   window.addEventListener("scroll", scheduleNavigationUpdate, { passive: true });
   window.addEventListener("resize", scheduleNavigationUpdate);
-  window.addEventListener("hashchange", scheduleNavigationUpdate);
+  window.addEventListener("hashchange", () => {
+    refreshLanguageLinks();
+    scheduleNavigationUpdate();
+  });
   root.addEventListener("toggle", scheduleNavigationUpdate, true);
   if (document.fonts) document.fonts.ready.then(scheduleNavigationUpdate);
 }
@@ -75,9 +82,7 @@ function applyLanguage(lang, options) {
   document.documentElement.lang = nextLang;
   document.body.dataset.lang = nextLang;
   root.innerHTML = renderApp(state.resume, nextLang, { openDisclosures });
-  updateMetadata(nextLang);
-  navigationLinks = Array.from(root.querySelectorAll("[data-nav-section]"));
-  updateNavigation();
+  root.querySelector("[data-print]").hidden = false;
 
   if (options.persist) {
     writeStoredLanguage(nextLang);
@@ -90,12 +95,28 @@ function applyLanguage(lang, options) {
     window.history.replaceState({ lang: nextLang }, "", window.location.href);
   }
 
+  updateMetadata(nextLang);
+  refreshLanguageLinks();
+  navigationLinks = Array.from(root.querySelectorAll("[data-nav-section]"));
+  updateNavigation();
+
   if (options.refocusLanguage && focusedLang) {
     const button = root.querySelector(`[data-lang-btn="${focusedLang}"]`);
     if (button) {
       button.focus({ preventScroll: true });
     }
   }
+}
+
+function shouldLetBrowserHandleLanguageLink(event, element) {
+  return element.tagName === "A" && (
+    event.defaultPrevented ||
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey
+  );
 }
 
 function scheduleNavigationUpdate() {
@@ -143,13 +164,30 @@ function updateMetadata(lang) {
   setMeta("description", metadata.description);
   setMeta("twitter:title", metadata.title);
   setMeta("twitter:description", metadata.description);
+  setMeta("twitter:image:alt", metadata.imageAlt);
   setMetaProperty("og:title", metadata.title);
   setMetaProperty("og:description", metadata.description);
   setMetaProperty("og:locale", metadata.ogLocale);
+  setMetaProperty("og:image:alt", metadata.imageAlt);
+  setMetaProperty("og:url", metadata.ogUrl);
+  setLink("canonical", metadata.canonicalUrl);
+  setAlternateLinks(metadata.alternates);
 
   const structuredData = document.getElementById("structured-data");
   if (structuredData) {
     structuredData.textContent = JSON.stringify(createStructuredData(page, lang), null, 2);
+  }
+}
+
+function refreshLanguageLinks() {
+  for (const link of root.querySelectorAll("[data-lang-btn]")) {
+    const lang = resolveLanguage(link.getAttribute("data-lang-btn"));
+    link.setAttribute("href", buildLanguageHref(window.location.href, lang));
+    if (lang === state.lang) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
   }
 }
 
@@ -175,6 +213,30 @@ function setMetaProperty(property, content) {
     document.head.append(element);
   }
   element.setAttribute("content", content);
+}
+
+function setLink(rel, href) {
+  let element = document.head.querySelector(`link[rel="${cssEscape(rel)}"]`);
+  if (!element) {
+    element = document.createElement("link");
+    element.setAttribute("rel", rel);
+    document.head.append(element);
+  }
+  element.setAttribute("href", href);
+}
+
+function setAlternateLinks(alternates) {
+  for (const element of document.head.querySelectorAll("link[data-resume-alternate]")) {
+    element.remove();
+  }
+  for (const item of alternates) {
+    const element = document.createElement("link");
+    element.setAttribute("rel", "alternate");
+    element.setAttribute("hreflang", item.lang);
+    element.setAttribute("href", item.href);
+    element.setAttribute("data-resume-alternate", "");
+    document.head.append(element);
+  }
 }
 
 function readStoredLanguage() {

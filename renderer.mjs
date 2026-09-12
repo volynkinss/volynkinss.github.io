@@ -1,5 +1,13 @@
 export const SUPPORTED_LANGUAGES = ["en", "ru"];
 export const DEFAULT_LANGUAGE = "en";
+export const SITE_URL = "https://volynkinss.github.io/";
+
+const LANGUAGE_PAGE_PATHS = {
+  en: "/en.html",
+  ru: "/ru.html",
+};
+
+const INDEX_PAGE_PATH = "/";
 
 const DEFAULT_UI = {
   en: {
@@ -25,6 +33,8 @@ const DEFAULT_UI = {
     background: "Earlier Management Experience",
     education: "Education",
     contacts: "Contacts",
+    workExperience: "Work experience",
+    spokenLanguages: "Languages",
     projectLink: "Open link",
     moreProjects: "More projects",
     architectureCode: "Code",
@@ -54,6 +64,8 @@ const DEFAULT_UI = {
     background: "Предыдущий управленческий опыт",
     education: "Образование",
     contacts: "Контакты",
+    workExperience: "Опыт работы",
+    spokenLanguages: "Языки",
     projectLink: "Открыть ссылку",
     moreProjects: "Ещё проекты",
     architectureCode: "Код",
@@ -63,16 +75,15 @@ const DEFAULT_UI = {
 };
 
 const SECTION_ORDER = [
+  "skills",
   "experience",
   "projects",
   "other-projects",
-  "skills",
-  "background",
   "education",
   "contacts",
 ];
 
-const HEADER_NAV_SECTION_IDS = ["experience", "projects", "skills", "contacts"];
+const HEADER_NAV_SECTION_IDS = ["skills", "experience", "projects", "contacts"];
 
 export function isSupportedLanguage(value) {
   return SUPPORTED_LANGUAGES.includes(String(value || "").toLowerCase());
@@ -89,6 +100,10 @@ export function resolveLanguage(value, fallback = DEFAULT_LANGUAGE) {
 export function getLanguageFromUrl(urlLike) {
   try {
     const url = new URL(urlLike, "https://resume.local/");
+    const pathLang = getLanguageFromPathname(url.pathname);
+    if (pathLang) {
+      return pathLang;
+    }
     const lang = url.searchParams.get("lang");
     return isSupportedLanguage(lang) ? lang : "";
   } catch {
@@ -110,7 +125,8 @@ export function buildLanguageHref(currentHref, lang) {
   const nextLang = resolveLanguage(lang);
   const fallbackOrigin = "https://resume.local";
   const url = new URL(currentHref || "/", `${fallbackOrigin}/`);
-  url.searchParams.set("lang", nextLang);
+  url.pathname = joinPathname(getDirectoryPathname(url.pathname), LANGUAGE_PAGE_PATHS[nextLang]);
+  url.searchParams.delete("lang");
   if (url.origin === fallbackOrigin) {
     return `${url.pathname}${url.search}${url.hash}`;
   }
@@ -146,17 +162,22 @@ export function validateResumeData(input) {
   }
 }
 
-export function renderDocument(rawResume, lang, template) {
+export function renderDocument(rawResume, lang, template, options = {}) {
   const resume = normalizeResume(rawResume);
-  const page = resume[resolveLanguage(lang)];
-  const metadata = createMetadata(page, resolveLanguage(lang));
-  const appHtml = renderApp(resume, resolveLanguage(lang));
+  const activeLang = resolveLanguage(lang);
+  const page = resume[activeLang];
+  const metadata = createMetadata(page, activeLang, options);
+  const appHtml = renderApp(resume, activeLang, { currentHref: metadata.documentPath });
   const structuredData = safeJsonForScript(createStructuredData(page, resolveLanguage(lang)));
 
   return replaceTemplate(template, {
-    lang: resolveLanguage(lang),
+    lang: activeLang,
     title: metadata.title,
     description: metadata.description,
+    canonicalUrl: metadata.canonicalUrl,
+    ogUrl: metadata.ogUrl,
+    imageAlt: metadata.imageAlt,
+    alternateLinks: renderAlternateLinks(metadata.alternates),
     ogLocale: metadata.ogLocale,
     structuredData,
     appHtml,
@@ -173,31 +194,45 @@ export function renderApp(rawResume, lang = DEFAULT_LANGUAGE, options = {}) {
 
   return `
     <a class="skip-link" href="#top">${escapeHtml(ui.skip)}</a>
-    ${renderHeader(page, activeLang, sections)}
-    ${renderMobileNav(page, sections)}
+      ${renderHeader(page, activeLang, sections, options.currentHref || LANGUAGE_PAGE_PATHS[activeLang])}
+      ${renderMobileNav(page, sections)}
     <main id="top" class="resume-page" tabindex="-1">
       ${renderHero(page, activeDisclosures)}
-      ${renderEmployment(page, "01")}
-      ${renderProjects(page, "02")}
-      ${renderOtherProjects(page, "03", activeDisclosures)}
-      ${renderSkills(page, "04")}
-      ${renderBackground(page, "05")}
-      ${renderEducation(page, "06")}
-      ${renderContacts(page, "07")}
+      ${renderSkills(page, "01")}
+      ${renderEmployment(page, "02")}
+      ${renderProjects(page, "03")}
+      ${renderOtherProjects(page, "04", activeDisclosures)}
+      ${renderEducation(page, "05")}
+      ${renderContacts(page, "06")}
     </main>
     ${renderFooter(page)}
     <a class="back-to-top" href="#top" aria-label="${escapeAttr(ui.backToTop)}">${escapeHtml(ui.backToTop)}</a>
   `;
 }
 
-export function createMetadata(page, lang = DEFAULT_LANGUAGE) {
+export function createMetadata(page, lang = DEFAULT_LANGUAGE, options = {}) {
+  const activeLang = resolveLanguage(lang);
   const titleParts = [page.name, page.headline].filter(Boolean);
   const title = titleParts.length ? titleParts.join(" - ") : "Resume";
   const description = truncate(page.metaDescription || page.summary || title, 220);
+  const documentPath = normalizeDocumentPath(options.path || LANGUAGE_PAGE_PATHS[activeLang]);
+  const canonicalUrl = createSiteUrl(documentPath);
+  const alternates = SUPPORTED_LANGUAGES.map((item) => ({
+    lang: item,
+    href: createSiteUrl(LANGUAGE_PAGE_PATHS[item]),
+  }));
+  alternates.push({ lang: "x-default", href: createSiteUrl(INDEX_PAGE_PATH) });
   return {
     title,
     description,
-    ogLocale: resolveLanguage(lang) === "ru" ? "ru_RU" : "en_US",
+    documentPath,
+    canonicalUrl,
+    ogUrl: canonicalUrl,
+    alternates,
+    imageAlt: page.imageAlt || (activeLang === "ru"
+      ? `${page.name || "Резюме"} — превью страницы резюме.`
+      : `${page.name || "Resume"} resume page preview.`),
+    ogLocale: activeLang === "ru" ? "ru_RU" : "en_US",
   };
 }
 
@@ -242,7 +277,7 @@ export function runRendererSelfTests() {
   }
 
   const href = buildLanguageHref("https://example.test/cv/?ref=1#contacts", "ru");
-  if (href !== "https://example.test/cv/?ref=1&lang=ru#contacts") {
+  if (href !== "https://example.test/cv/ru.html?ref=1#contacts") {
     throw new Error("Language URL update must preserve other params and hash.");
   }
 
@@ -281,6 +316,7 @@ function normalizePage(page = {}, lang = DEFAULT_LANGUAGE) {
     summary: text(page.summary),
     summaryIntro: text(page.summaryIntro),
     metaDescription: text(page.metaDescription),
+    imageAlt: text(page.imageAlt),
     ui,
     contacts: array(page.contacts).map(normalizeContact).filter((contact) => contact.value || contact.href),
     employment: normalizeEmployment(page.employment),
@@ -327,9 +363,11 @@ function normalizeProject(input = {}) {
     id: stableId(item.id || item.title || "project"),
     title: text(item.title),
     role: text(item.role),
+    category: text(item.category),
     period: text(item.period),
     status: text(item.status),
     description: text(item.description),
+    contribution: text(item.contribution),
     bullets: strings(item.bullets),
     stack: strings(item.stack),
     links: array(item.links).map(normalizeLink).filter((link) => link.label && link.url),
@@ -393,7 +431,7 @@ function normalizeLink(input = {}) {
   };
 }
 
-function renderHeader(page, lang, sections) {
+function renderHeader(page, lang, sections, currentHref) {
   const ui = page.ui;
   const navSections = sections.filter((section) => HEADER_NAV_SECTION_IDS.includes(section.id));
   return `
@@ -411,14 +449,14 @@ function renderHeader(page, lang, sections) {
       <div class="header-actions" aria-label="${escapeAttr(ui.languageLabel)}">
         <div class="language-switch" role="group" aria-label="${escapeAttr(ui.languageLabel)}">
           ${SUPPORTED_LANGUAGES.map((item) => `
-            <button class="language-button" type="button" data-lang-btn="${item}" aria-pressed="${item === lang ? "true" : "false"}">
+            <a class="language-button" href="${escapeAttr(buildLanguageHref(currentHref, item))}" data-lang-btn="${item}" hreflang="${item}" lang="${item}"${item === lang ? ' aria-current="page"' : ""}>
               ${item.toUpperCase()}
-            </button>
+            </a>
           `).join("")}
         </div>
         <div class="document-actions">
           <a class="download-button" href="./downloads/Sergey_Volynkin_CV_${lang.toUpperCase()}.pdf" download="Sergey_Volynkin_CV_${lang.toUpperCase()}.pdf" aria-label="${escapeAttr(ui.downloadPdfLabel)}">${escapeHtml(ui.downloadPdf)}</a>
-          <button class="print-button" type="button" data-print>${escapeHtml(ui.print)}</button>
+          <button class="print-button" type="button" data-print hidden>${escapeHtml(ui.print)}</button>
         </div>
       </div>
     </header>
@@ -441,7 +479,6 @@ function renderMobileNav(page, sections) {
 function renderHero(page, activeDisclosures) {
   const metaItems = [
     page.location,
-    page.languages,
   ].filter(Boolean);
 
   return `
@@ -474,8 +511,8 @@ function renderHero(page, activeDisclosures) {
           </div>
         </div>
       </div>
-      ${renderSummary(page, activeDisclosures)}
       ${renderContactList(page, "hero-contacts")}
+      ${renderSummary(page, activeDisclosures)}
       ${page.availability ? `<p class="availability">${escapeHtml(page.availability)}</p>` : ""}
     </section>
   `;
@@ -483,45 +520,39 @@ function renderHero(page, activeDisclosures) {
 
 function renderSummary(page, activeDisclosures) {
   if (!page.summary) return "";
-  const fullSummary = `<p class="summary summary-desktop">${escapeHtml(page.summary)}</p>`;
-  const intro = page.summaryIntro;
-  if (!intro || !page.summary.startsWith(intro) || intro === page.summary) {
-    return `<p class="summary">${escapeHtml(page.summary)}</p>`;
-  }
-  const remainder = page.summary.slice(intro.length).trimStart();
-  const open = activeDisclosures.has("profile-summary") ? " open" : "";
-  return `${fullSummary}
-    <div class="summary-mobile">
-      <p class="summary">${escapeHtml(intro)}</p>
-      <details class="summary-details" data-disclosure="profile-summary"${open}>
-        <summary>${escapeHtml(page.ui.summaryMore)}</summary>
-        <p>${escapeHtml(remainder)}</p>
-      </details>
-    </div>`;
+  return `<p class="summary">${escapeHtml(page.summary)}</p>`;
 }
 
 function renderEmployment(page, number) {
   const employment = page.employment;
-  if (!hasEmployment(employment)) {
+  const hasCurrentEmployment = hasEmployment(employment);
+  const backgroundHtml = renderBackground(page);
+  if (!hasCurrentEmployment && !backgroundHtml) {
     return "";
   }
   const ui = page.ui;
   return `
     <section id="experience" class="content-section current-section" aria-labelledby="experience-title">
-      ${renderSectionLabel(number, ui.experience)}
-      <article class="employment-panel">
+      ${renderSectionLabel(number, ui.workExperience)}
+      <div class="section-heading">
+        <h2 id="experience-title">${escapeHtml(ui.workExperience)}</h2>
+      </div>
+      ${hasCurrentEmployment ? `<article class="employment-panel" aria-labelledby="employment-title">
         <div class="employment-head">
           <div>
             ${employment.company ? `<p class="company">${escapeHtml(employment.company)}</p>` : ""}
-            ${employment.role ? `<h2 id="experience-title">${escapeHtml(employment.role)}</h2>` : `<h2 id="experience-title">${escapeHtml(ui.experience)}</h2>`}
+            <div class="role-row">
+              ${employment.role ? `<h3 id="employment-title">${escapeHtml(employment.role)}</h3>` : `<h3 id="employment-title">${escapeHtml(ui.experience)}</h3>`}
+              ${employment.period ? `<p class="period">${escapeHtml(employment.period)}</p>` : ""}
+            </div>
             ${employment.department ? `<p class="department">${escapeHtml(employment.department)}</p>` : ""}
           </div>
-          ${employment.period ? `<p class="period">${escapeHtml(employment.period)}</p>` : ""}
         </div>
         ${employment.overview ? `<p class="overview">${escapeHtml(employment.overview)}</p>` : ""}
         ${employment.cases.length ? `<div class="case-grid">${employment.cases.map((item) => renderCase(item)).join("")}</div>` : ""}
         ${employment.automation ? `<p class="automation-note">${escapeHtml(employment.automation)}</p>` : ""}
-      </article>
+      </article>` : ""}
+      ${backgroundHtml}
     </section>
   `;
 }
@@ -531,7 +562,7 @@ function renderCase(item) {
     <article id="case-${escapeAttr(item.id)}" class="case-card">
       <div class="case-head">
         <div>
-          ${item.title ? `<h3>${escapeHtml(item.title)}</h3>` : ""}
+          ${item.title ? `<h4>${escapeHtml(item.title)}</h4>` : ""}
           ${item.subtitle ? `<p>${escapeHtml(item.subtitle)}</p>` : ""}
         </div>
         ${item.status ? `<span class="status">${escapeHtml(item.status)}</span>` : ""}
@@ -565,11 +596,13 @@ function renderProject(project) {
     <article id="project-${escapeAttr(project.id)}" class="project-card">
       <div class="project-head">
         ${project.title ? `<h3>${escapeHtml(project.title)}</h3>` : ""}
+        ${project.category ? `<p class="project-category">${escapeHtml(project.category)}</p>` : ""}
         ${project.role ? `<p class="project-role">${escapeHtml(project.role)}</p>` : ""}
         ${project.period ? `<p class="project-period">${escapeHtml(project.period)}</p>` : ""}
         ${project.status ? `<span class="status project-status">${escapeHtml(project.status)}</span>` : ""}
       </div>
       ${project.description ? `<p class="project-description">${escapeHtml(project.description)}</p>` : ""}
+      ${project.contribution ? `<p class="project-contribution">${escapeHtml(project.contribution)}</p>` : ""}
       ${project.bullets.length ? renderBulletList(project.bullets) : ""}
       ${renderTagList(project.stack, "stack-list")}
       ${renderLinks(project.links)}
@@ -588,7 +621,7 @@ function renderOtherProjects(page, number, activeDisclosures) {
       ${renderSectionLabel(number, ui.otherProjects)}
       <details class="other-projects" data-disclosure="other-projects"${open}>
         <summary>
-          <span id="other-projects-title">${escapeHtml(ui.otherProjects)}</span>
+          <h2 id="other-projects-title">${escapeHtml(ui.otherProjects)}</h2>
           <span>${escapeHtml(ui.moreProjects)}</span>
         </summary>
         <div class="other-project-list">
@@ -641,18 +674,19 @@ function renderSkill(skill) {
   `;
 }
 
-function renderBackground(page, number) {
+function renderBackground(page) {
   const background = page.background;
-  if (!background.company && !background.role && !background.description) {
+  if (!hasBackground(background)) {
     return "";
   }
   const ui = page.ui;
   return `
-    <section id="background" class="content-section slim-section" aria-labelledby="background-title">
-      ${renderSectionLabel(number, ui.background)}
+    <section id="background" class="background-panel" aria-labelledby="background-title">
       <div class="text-panel">
-        <h2 id="background-title">${escapeHtml(ui.background)}</h2>
-        <p class="strong-line">${[background.role, background.company, background.period].filter(Boolean).map(escapeHtml).join(" · ")}</p>
+        <h3 id="background-title">${escapeHtml(ui.background)}</h3>
+        ${background.company ? `<p class="company">${escapeHtml(background.company)}</p>` : ""}
+        ${background.role ? `<p class="strong-line">${escapeHtml(background.role)}</p>` : ""}
+        ${background.period ? `<p class="period">${escapeHtml(background.period)}</p>` : ""}
         ${background.description ? `<p>${escapeHtml(background.description)}</p>` : ""}
       </div>
     </section>
@@ -661,7 +695,7 @@ function renderBackground(page, number) {
 
 function renderEducation(page, number) {
   const education = page.education;
-  if (!education.institution && !education.degree && !education.year) {
+  if (!education.institution && !education.degree && !education.year && !page.languages) {
     return "";
   }
   const ui = page.ui;
@@ -672,6 +706,7 @@ function renderEducation(page, number) {
         <h2 id="education-title">${escapeHtml(ui.education)}</h2>
         ${education.institution ? `<p class="strong-line">${escapeHtml(education.institution)}</p>` : ""}
         ${[education.degree, education.year].filter(Boolean).length ? `<p>${[education.degree, education.year].filter(Boolean).map(escapeHtml).join(" · ")}</p>` : ""}
+        ${page.languages ? `<p class="language-line"><strong>${escapeHtml(ui.spokenLanguages)}:</strong> ${escapeHtml(page.languages)}</p>` : ""}
       </div>
     </section>
   `;
@@ -710,7 +745,7 @@ function renderContactList(page, className) {
 }
 
 function renderFooter(page) {
-  const footer = page.footer || page.languages;
+  const footer = page.footer;
   const alias = '<span id="interests" class="anchor-alias" aria-hidden="true"></span>';
   if (!footer) {
     return `<footer class="site-footer">${alias}</footer>`;
@@ -747,20 +782,18 @@ function renderLinks(links) {
 
 function getVisibleSections(page) {
   const available = {
-    experience: hasEmployment(page.employment),
+    experience: hasEmployment(page.employment) || hasBackground(page.background),
     projects: page.projects.length || page.projectIntro,
     "other-projects": page.otherProjects.length,
     skills: page.skills.length,
-    background: page.background.company || page.background.role || page.background.description,
-    education: page.education.institution || page.education.degree || page.education.year,
+    education: page.education.institution || page.education.degree || page.education.year || page.languages,
     contacts: page.contacts.length,
   };
   const labels = {
-    experience: page.ui.experience,
+    experience: page.ui.workExperience,
     projects: page.ui.projects,
     "other-projects": page.ui.otherProjects,
     skills: page.ui.skills,
-    background: page.ui.background,
     education: page.ui.education,
     contacts: page.ui.contacts,
   };
@@ -779,15 +812,60 @@ function hasEmployment(employment) {
   );
 }
 
+function hasBackground(background) {
+  return Boolean(background.company || background.role || background.period || background.description);
+}
+
 function replaceTemplate(template, values) {
   return template.replace(/\{\{([a-zA-Z]+)\}\}/g, (_, key) => escapeTemplateValue(values[key] || "", key));
 }
 
 function escapeTemplateValue(value, key) {
-  if (key === "appHtml" || key === "structuredData") {
+  if (key === "appHtml" || key === "structuredData" || key === "alternateLinks") {
     return String(value);
   }
   return escapeAttr(value);
+}
+
+function renderAlternateLinks(alternates) {
+  return alternates
+    .map((item) => `<link rel="alternate" hreflang="${escapeAttr(item.lang)}" href="${escapeAttr(item.href)}" data-resume-alternate>`)
+    .join("\n  ");
+}
+
+function createSiteUrl(pathname) {
+  return new URL(normalizeDocumentPath(pathname), SITE_URL).href;
+}
+
+function normalizeDocumentPath(pathname) {
+  const value = text(pathname) || INDEX_PAGE_PATH;
+  if (/^https?:\/\//i.test(value)) {
+    return new URL(value).pathname;
+  }
+  const withLeadingSlash = value.startsWith("/") ? value : `/${value}`;
+  return withLeadingSlash.replace(/\/index\.html$/i, "/");
+}
+
+function getLanguageFromPathname(pathname) {
+  const lastSegment = decodeURIComponent(String(pathname || "").split("/").pop() || "").toLowerCase();
+  if (lastSegment === "ru.html") return "ru";
+  if (lastSegment === "en.html") return "en";
+  return "";
+}
+
+function getDirectoryPathname(pathname) {
+  const value = String(pathname || "/");
+  if (value.endsWith("/")) {
+    return value;
+  }
+  const slash = value.lastIndexOf("/");
+  return slash >= 0 ? value.slice(0, slash + 1) : "/";
+}
+
+function joinPathname(directory, filePath) {
+  const cleanDirectory = String(directory || "/").replace(/\/?$/, "/");
+  const cleanFile = String(filePath || "").replace(/^\/+/, "");
+  return `${cleanDirectory}${cleanFile}`.replace(/\/{2,}/g, "/");
 }
 
 function objectOrEmpty(value) {

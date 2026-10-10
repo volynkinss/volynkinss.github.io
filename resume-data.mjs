@@ -4,7 +4,7 @@ export const resume = {
     headline: 'Software Implementation & Support Engineer',
     location: 'Saint Petersburg',
     availability: 'Saint Petersburg: office or hybrid; also open to remote and contract work. Russian and international companies; relocation with employer support.',
-    summary: 'I implement and support applications on Linux: Docker deployment, service integrations, troubleshooting and open-source customization. At IBK, I support a remote-access gateway serving 70–100 users daily and integrate applications with Keycloak. Python development and changes to existing Go codebases help me automate operations and resolve application issues.',
+    summary: 'I implement and support applications on Linux: Docker deployment, service integrations, troubleshooting and open-source customization. At IBK, I support a remote-access gateway serving 70–100 users daily and integrate applications with Keycloak. Python development and changes to existing Go codebases help me automate operations and resolve application issues. My most complex project to date is Supplier Price Parser / Price Order, currently in active development with Codex assistance.',
     metaDescription: 'Sergey Volynkin — Software Implementation & Support Engineer. Linux, Docker, application integration, Keycloak, PostgreSQL and troubleshooting. Saint Petersburg; open to remote work.',
     ui: { skip: 'Skip to content', navLabel: 'Resume sections', languageLabel: 'Resume language', print: 'Print', backToTop: 'Back to top', email: 'Email', phone: 'Phone', github: 'GitHub', telegram: 'Telegram', experience: 'Work experience', projects: 'Selected projects', otherProjects: 'Other engineering projects', skills: 'Key competencies', background: 'Earlier experience outside IT', education: 'Education', contacts: 'Get in touch', projectLink: 'Visit project', moreProjects: 'Earlier software projects' },
     contacts: [
@@ -34,6 +34,31 @@ export const resume = {
     },
     projectIntro: "Projects outside my IBK role: a co-owned product and my own services built for clients.",
     projects: [
+      {
+        id: "supplier-parser",
+        title: "Supplier Price Parser / Price Order",
+        status: "In active development",
+        role: "Project owner · requirements, development and deployment",
+        contribution: "Developed with substantial Codex and AI assistance: I define task scope and acceptance criteria, review generated changes, run relevant checks and validate operator workflows.",
+        description: "My most technically complex project to date: a client system for processing supplier price lists and Telegram messages, matching products and preparing orders.",
+        bullets: [
+          "Telegram and XLSX ingestion, price-list normalization and background processing form a workflow from source data to catalog matching and order preparation.",
+          "A protected operator workspace supports review and manual catalog matching. LLM-assisted matching through OpenRouter proposes candidate products; decisions require explicit operator confirmation.",
+          "PostgreSQL stores source snapshots and audit history, preserving the input data and recorded processing decisions."
+        ],
+        stack: [
+          "Python",
+          "FastAPI",
+          "PostgreSQL",
+          "Telegram",
+          "OpenPyXL · XLSX",
+          "OpenRouter · LLM APIs",
+          "Codex",
+          "Docker Compose",
+          "GitHub Actions"
+        ],
+        category: "Client project"
+      },
       {
         id: "boltfather",
         title: "BoltFather",
@@ -87,29 +112,6 @@ export const resume = {
         ],
         links: [
           {"label":"Project website","url":"https://rentalkeeper.ru/"}
-        ],
-        category: "Client project"
-      },
-      {
-        id: "supplier-parser",
-        title: "Supplier Price Parser",
-        status: "In client use · being refined",
-        role: "Project owner · development and deployment",
-        contribution: "Code developed with substantial assistance from AI tools.",
-        description: "A service for collecting supplier price lists and preparing structured data for review and ordering.",
-        bullets: [
-          "The FastAPI workflow includes Telegram/XLSX ingestion, a protected operator workspace, catalog matching and order preparation.",
-          "PostgreSQL stores source snapshots and audit history. Background jobs process data; LLM candidate suggestions require explicit operator confirmation."
-        ],
-        stack: [
-          "Python",
-          "FastAPI",
-          "PostgreSQL",
-          "Telegram",
-          "OpenPyXL",
-          "OpenRouter",
-          "Docker Compose",
-          "GitHub Actions"
         ],
         category: "Client project"
       },
@@ -184,7 +186,8 @@ export const resume = {
           "PostGIS · OSRM",
           "RabbitMQ · Taskiq",
           "aiogram · TON integrations",
-          "LLM APIs"
+          "LLM APIs",
+          "Codex — scoped development and change review"
         ]
       }
     ],
@@ -198,7 +201,7 @@ export const resume = {
     headline: 'Инженер по внедрению и сопровождению ПО',
     location: 'Санкт-Петербург',
     availability: 'Санкт-Петербург: офис или гибрид; также удалённая и контрактная работа. Российские и международные компании; релокация — при поддержке работодателя.',
-    summary: 'Внедряю и сопровождаю приложения на Linux: развёртывание в Docker, интеграции, диагностика и доработка open-source решений. В IBK поддерживаю шлюз удалённого доступа для 70–100 пользователей в день и интегрирую приложения с Keycloak. Разработка на Python и доработка кода на Go помогают автоматизировать задачи и устранять проблемы в приложениях.',
+    summary: 'Внедряю и сопровождаю приложения на Linux: развёртывание в Docker, интеграции, диагностика и доработка open-source решений. В IBK поддерживаю шлюз удалённого доступа для 70–100 пользователей в день и интегрирую приложения с Keycloak. Разработка на Python и доработка кода на Go помогают автоматизировать задачи и устранять проблемы в приложениях. Мой самый сложный проект — парсер прайс-листов / Price Order: активно разрабатываю его с помощью Codex.',
     metaDescription: 'Сергей Волынкин — инженер по внедрению и сопровождению ПО. Linux, Docker, интеграции, Keycloak, PostgreSQL и диагностика приложений. Санкт-Петербург; офис, гибрид, удалённая работа.',
     ui: { skip: 'Перейти к содержимому', navLabel: 'Разделы резюме', languageLabel: 'Язык резюме', print: 'Печать', backToTop: 'Вернуться к началу', email: 'Почта', phone: 'Телефон', github: 'GitHub', telegram: 'Telegram', experience: 'Опыт работы', projects: 'Выбранные проекты', otherProjects: 'Другие инженерные проекты', skills: 'Ключевые компетенции', background: 'Предыдущий опыт вне IT', education: 'Образование', contacts: 'Связаться со мной', projectLink: 'Перейти к проекту', moreProjects: 'Другие программные проекты' },
     contacts: [
@@ -228,6 +231,31 @@ export const resume = {
     },
     projectIntro: "Проекты вне основной работы в IBK: продукт в совместной собственности и собственные сервисы для заказчиков.",
     projects: [
+      {
+        id: "supplier-parser",
+        title: "Парсер прайс-листов / Price Order",
+        status: "В активной разработке",
+        role: "Владелец проекта · требования, разработка и развёртывание",
+        contribution: "Разрабатываю с существенной помощью Codex и AI-инструментов: задаю границы задач и критерии приёмки, проверяю сгенерированные изменения, запускаю проверки и проверяю сценарии оператора.",
+        description: "Мой самый сложный технический проект: система для заказчика, которая обрабатывает прайс-листы поставщиков и сообщения Telegram, сопоставляет товары и помогает готовить заказы.",
+        bullets: [
+          "Импорт из Telegram и XLSX, нормализация прайс-листов и фоновая обработка объединены в процесс от исходных данных до сопоставления с каталогом и подготовки заказа.",
+          "Защищённое рабочее место оператора позволяет проверять данные и вручную сопоставлять позиции с каталогом. LLM через OpenRouter предлагает товары-кандидаты; решения требуют явного подтверждения оператором.",
+          "PostgreSQL хранит снимки источников и историю действий, сохраняя исходные данные и принятые при обработке решения."
+        ],
+        stack: [
+          "Python",
+          "FastAPI",
+          "PostgreSQL",
+          "Telegram",
+          "OpenPyXL · XLSX",
+          "OpenRouter · LLM API",
+          "Codex",
+          "Docker Compose",
+          "GitHub Actions"
+        ],
+        category: "Проект для заказчика"
+      },
       {
         id: "boltfather",
         title: "BoltFather",
@@ -281,29 +309,6 @@ export const resume = {
         ],
         links: [
           {"label":"Сайт проекта","url":"https://rentalkeeper.ru/"}
-        ],
-        category: "Проект для заказчика"
-      },
-      {
-        id: "supplier-parser",
-        title: "Парсер прайсов поставщиков",
-        status: "Используется заказчиком · дорабатывается",
-        role: "Владелец проекта · разработка и развёртывание",
-        contribution: "Код разработан с существенным участием AI-инструментов.",
-        description: "Сервис сбора прайсов поставщиков и подготовки структурированных данных для проверки и формирования заказов.",
-        bullets: [
-          "В FastAPI реализованы приём Telegram/XLSX, защищённый кабинет оператора, сопоставление каталога и подготовка заказов.",
-          "PostgreSQL хранит исходные снимки и журнал действий. Обработка выполняется в фоновых заданиях; рекомендации LLM требуют подтверждения оператора."
-        ],
-        stack: [
-          "Python",
-          "FastAPI",
-          "PostgreSQL",
-          "Telegram",
-          "OpenPyXL",
-          "OpenRouter",
-          "Docker Compose",
-          "GitHub Actions"
         ],
         category: "Проект для заказчика"
       },
@@ -378,7 +383,8 @@ export const resume = {
           "PostGIS · OSRM",
           "RabbitMQ · Taskiq",
           "aiogram · интеграции TON",
-          "LLM API"
+          "LLM API",
+          "Codex — постановка задач и проверка изменений"
         ]
       }
     ],

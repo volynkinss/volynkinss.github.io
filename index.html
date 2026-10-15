@@ -145,7 +145,7 @@
 
     </ul>
 
-      <p class="summary">I implement and support applications on Linux: Docker deployment, service integrations, troubleshooting and open-source customization. At IBK, I support a remote-access gateway serving 70–100 users daily and integrate applications with Keycloak. Python development and changes to existing Go codebases help me automate operations and resolve application issues. My most complex project to date is Supplier Price Parser / Price Order, currently in active development with Codex assistance.</p>
+      <p class="summary">I implement and support applications on Linux: Docker deployment, service integrations, troubleshooting and open-source customization. At IBK, I support a remote-access gateway serving 70–100 users daily and integrate applications with Keycloak. Python development and changes to existing Go codebases help me automate operations and resolve application issues.</p>
       <p class="availability">Saint Petersburg: office or hybrid; also open to remote and contract work. Russian and international companies; relocation with employer support.</p>
     </section>
 
@@ -301,10 +301,10 @@
 
         <span class="status project-status">In active development</span>
       </div>
-      <p class="project-description">My most technically complex project to date: a client system for processing supplier price lists and Telegram messages, matching products and preparing orders.</p>
+      <p class="project-description">A client system for catalog matching, price comparison and order preparation using supplier price lists and Telegram messages.</p>
       <p class="project-contribution">Developed with substantial Codex and AI assistance: I define task scope and acceptance criteria, review generated changes, run relevant checks and validate operator workflows.</p>
-      <ul class="bullet-list"><li>Telegram and XLSX ingestion, price-list normalization and background processing form a workflow from source data to catalog matching and order preparation.</li><li>A protected operator workspace supports review and manual catalog matching. LLM-assisted matching through OpenRouter proposes candidate products; decisions require explicit operator confirmation.</li><li>PostgreSQL stores source snapshots and audit history, preserving the input data and recorded processing decisions.</li></ul>
-      <ul class="stack-list"><li>Python</li><li>FastAPI</li><li>PostgreSQL</li><li>Telegram</li><li>OpenPyXL · XLSX</li><li>OpenRouter · LLM APIs</li><li>Codex</li><li>Docker Compose</li><li>GitHub Actions</li></ul>
+      <ul class="bullet-list"><li>A unified Telegram/XLSX ingestion workflow normalizes products and reuses confirmed catalog mappings. Operators review and confirm LLM suggestions from OpenRouter; supplier offers can be compared with PiterGSM retail prices.</li><li>PostgreSQL-backed background jobs use leases, retries and worker recovery, with protection against stale results. Source snapshots and an audit trail preserve input data and processing decisions.</li><li>Operational tooling includes Prometheus/Grafana monitoring, encrypted backups to S3 and restore checks in an isolated Docker environment.</li></ul>
+      <ul class="stack-list"><li>Python</li><li>FastAPI</li><li>PostgreSQL</li><li>Telegram</li><li>OpenPyXL · XLSX</li><li>OpenRouter · LLM APIs</li><li>Codex</li><li>Docker Compose</li><li>GitHub Actions</li><li>Prometheus · Grafana</li><li>S3 · age</li></ul>
 
     </article>
 
@@ -325,15 +325,15 @@
 
     <article id="project-kvartirka" class="project-card">
       <div class="project-head">
-        <h3>Kvartirka</h3>
+        <h3>Kvartirka / RentalKeeper</h3>
         <p class="project-category">Client project</p>
         <p class="project-role">Project owner · development and deployment</p>
 
         <span class="status project-status">In client use · being refined</span>
       </div>
-      <p class="project-description">A workspace for managing rental properties, bookings and financial records.</p>
+      <p class="project-description">A short-term rental management service with bookings, payments, documents and financial planning for properties and portfolios.</p>
       <p class="project-contribution">Code developed with substantial assistance from AI tools.</p>
-      <ul class="bullet-list"><li>The NestJS/Fastify API and Next.js interface cover properties, bookings, payments, expenses and documents, with Prisma/PostgreSQL and Redis.</li><li>The project includes portfolio financial workflows, Docker Compose deployment, health checks and smoke validation through GitHub Actions.</li></ul>
+      <ul class="bullet-list"><li>Financial planning and plan-versus-actual reporting cover revenue, occupancy, platform and payment fees, payroll, taxes, allocated expenses and profit at property and portfolio level.</li><li>RealtyCalendar webhooks import bookings, payments and refunds with duplicate-event detection and handling for stale updates and conflicts.</li><li>The NestJS/Fastify API and Next.js interface use Prisma/PostgreSQL and Redis. GitHub Actions delivery includes Docker images, migrations, readiness checks, configurable API/UI canary checks and application rollback.</li></ul>
       <ul class="stack-list"><li>TypeScript</li><li>NestJS</li><li>Next.js · React</li><li>Prisma</li><li>PostgreSQL</li><li>Redis</li><li>Docker Compose</li><li>GitHub Actions</li></ul>
       <p class="link-row"><a href="https://rentalkeeper.ru/" target="_blank" rel="noreferrer">Project website</a></p>
     </article>

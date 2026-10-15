@@ -4,7 +4,7 @@ export const resume = {
     headline: 'Software Implementation & Support Engineer',
     location: 'Saint Petersburg',
     availability: 'Saint Petersburg: office or hybrid; also open to remote and contract work. Russian and international companies; relocation with employer support.',
-    summary: 'I implement and support applications on Linux: Docker deployment, service integrations, troubleshooting and open-source customization. At IBK, I support a remote-access gateway serving 70–100 users daily and integrate applications with Keycloak. Python development and changes to existing Go codebases help me automate operations and resolve application issues. My most complex project to date is Supplier Price Parser / Price Order, currently in active development with Codex assistance.',
+    summary: 'I implement and support applications on Linux: Docker deployment, service integrations, troubleshooting and open-source customization. At IBK, I support a remote-access gateway serving 70–100 users daily and integrate applications with Keycloak. Python development and changes to existing Go codebases help me automate operations and resolve application issues.',
     metaDescription: 'Sergey Volynkin — Software Implementation & Support Engineer. Linux, Docker, application integration, Keycloak, PostgreSQL and troubleshooting. Saint Petersburg; open to remote work.',
     ui: { skip: 'Skip to content', navLabel: 'Resume sections', languageLabel: 'Resume language', print: 'Print', backToTop: 'Back to top', email: 'Email', phone: 'Phone', github: 'GitHub', telegram: 'Telegram', experience: 'Work experience', projects: 'Selected projects', otherProjects: 'Other engineering projects', skills: 'Key competencies', background: 'Earlier experience outside IT', education: 'Education', contacts: 'Get in touch', projectLink: 'Visit project', moreProjects: 'Earlier software projects' },
     contacts: [
@@ -40,11 +40,11 @@ export const resume = {
         status: "In active development",
         role: "Project owner · requirements, development and deployment",
         contribution: "Developed with substantial Codex and AI assistance: I define task scope and acceptance criteria, review generated changes, run relevant checks and validate operator workflows.",
-        description: "My most technically complex project to date: a client system for processing supplier price lists and Telegram messages, matching products and preparing orders.",
+        description: "A client system for catalog matching, price comparison and order preparation using supplier price lists and Telegram messages.",
         bullets: [
-          "Telegram and XLSX ingestion, price-list normalization and background processing form a workflow from source data to catalog matching and order preparation.",
-          "A protected operator workspace supports review and manual catalog matching. LLM-assisted matching through OpenRouter proposes candidate products; decisions require explicit operator confirmation.",
-          "PostgreSQL stores source snapshots and audit history, preserving the input data and recorded processing decisions."
+          "A unified Telegram/XLSX ingestion workflow normalizes products and reuses confirmed catalog mappings. Operators review and confirm LLM suggestions from OpenRouter; supplier offers can be compared with PiterGSM retail prices.",
+          "PostgreSQL-backed background jobs use leases, retries and worker recovery, with protection against stale results. Source snapshots and an audit trail preserve input data and processing decisions.",
+          "Operational tooling includes Prometheus/Grafana monitoring, encrypted backups to S3 and restore checks in an isolated Docker environment."
         ],
         stack: [
           "Python",
@@ -55,7 +55,9 @@ export const resume = {
           "OpenRouter · LLM APIs",
           "Codex",
           "Docker Compose",
-          "GitHub Actions"
+          "GitHub Actions",
+          "Prometheus · Grafana",
+          "S3 · age"
         ],
         category: "Client project"
       },
@@ -91,14 +93,15 @@ export const resume = {
       },
       {
         id: "kvartirka",
-        title: "Kvartirka",
+        title: "Kvartirka / RentalKeeper",
         role: "Project owner · development and deployment",
         contribution: "Code developed with substantial assistance from AI tools.",
         status: "In client use · being refined",
-        description: "A workspace for managing rental properties, bookings and financial records.",
+        description: "A short-term rental management service with bookings, payments, documents and financial planning for properties and portfolios.",
         bullets: [
-          "The NestJS/Fastify API and Next.js interface cover properties, bookings, payments, expenses and documents, with Prisma/PostgreSQL and Redis.",
-          "The project includes portfolio financial workflows, Docker Compose deployment, health checks and smoke validation through GitHub Actions."
+          "Financial planning and plan-versus-actual reporting cover revenue, occupancy, platform and payment fees, payroll, taxes, allocated expenses and profit at property and portfolio level.",
+          "RealtyCalendar webhooks import bookings, payments and refunds with duplicate-event detection and handling for stale updates and conflicts.",
+          "The NestJS/Fastify API and Next.js interface use Prisma/PostgreSQL and Redis. GitHub Actions delivery includes Docker images, migrations, readiness checks, configurable API/UI canary checks and application rollback."
         ],
         stack: [
           "TypeScript",
@@ -201,7 +204,7 @@ export const resume = {
     headline: 'Инженер по внедрению и сопровождению ПО',
     location: 'Санкт-Петербург',
     availability: 'Санкт-Петербург: офис или гибрид; также удалённая и контрактная работа. Российские и международные компании; релокация — при поддержке работодателя.',
-    summary: 'Внедряю и сопровождаю приложения на Linux: развёртывание в Docker, интеграции, диагностика и доработка open-source решений. В IBK поддерживаю шлюз удалённого доступа для 70–100 пользователей в день и интегрирую приложения с Keycloak. Разработка на Python и доработка кода на Go помогают автоматизировать задачи и устранять проблемы в приложениях. Мой самый сложный проект — парсер прайс-листов / Price Order: активно разрабатываю его с помощью Codex.',
+    summary: 'Внедряю и сопровождаю приложения на Linux: развёртывание в Docker, интеграции, диагностика и доработка open-source решений. В IBK поддерживаю шлюз удалённого доступа для 70–100 пользователей в день и интегрирую приложения с Keycloak. Разработка на Python и доработка кода на Go помогают автоматизировать задачи и устранять проблемы в приложениях.',
     metaDescription: 'Сергей Волынкин — инженер по внедрению и сопровождению ПО. Linux, Docker, интеграции, Keycloak, PostgreSQL и диагностика приложений. Санкт-Петербург; офис, гибрид, удалённая работа.',
     ui: { skip: 'Перейти к содержимому', navLabel: 'Разделы резюме', languageLabel: 'Язык резюме', print: 'Печать', backToTop: 'Вернуться к началу', email: 'Почта', phone: 'Телефон', github: 'GitHub', telegram: 'Telegram', experience: 'Опыт работы', projects: 'Выбранные проекты', otherProjects: 'Другие инженерные проекты', skills: 'Ключевые компетенции', background: 'Предыдущий опыт вне IT', education: 'Образование', contacts: 'Связаться со мной', projectLink: 'Перейти к проекту', moreProjects: 'Другие программные проекты' },
     contacts: [
@@ -237,11 +240,11 @@ export const resume = {
         status: "В активной разработке",
         role: "Владелец проекта · требования, разработка и развёртывание",
         contribution: "Разрабатываю с существенной помощью Codex и AI-инструментов: задаю границы задач и критерии приёмки, проверяю сгенерированные изменения, запускаю проверки и проверяю сценарии оператора.",
-        description: "Мой самый сложный технический проект: система для заказчика, которая обрабатывает прайс-листы поставщиков и сообщения Telegram, сопоставляет товары и помогает готовить заказы.",
+        description: "Система для заказчика: от прайс-листов поставщиков и сообщений Telegram до сопоставления товаров, сравнения цен и подготовки заказов.",
         bullets: [
-          "Импорт из Telegram и XLSX, нормализация прайс-листов и фоновая обработка объединены в процесс от исходных данных до сопоставления с каталогом и подготовки заказа.",
-          "Защищённое рабочее место оператора позволяет проверять данные и вручную сопоставлять позиции с каталогом. LLM через OpenRouter предлагает товары-кандидаты; решения требуют явного подтверждения оператором.",
-          "PostgreSQL хранит снимки источников и историю действий, сохраняя исходные данные и принятые при обработке решения."
+          "Единый приём из Telegram и XLSX, нормализация товаров и повторное применение подтверждённых сопоставлений. Оператор проверяет и подтверждает LLM-подсказки через OpenRouter; предложения поставщиков можно сравнивать с розничными ценами PiterGSM.",
+          "Фоновые задания в PostgreSQL: контроль владения заданием, повторные попытки, восстановление после остановки worker и защита от устаревших результатов. Снимки источников и аудит сохраняют исходные данные и решения обработки.",
+          "Эксплуатационные инструменты: мониторинг Prometheus/Grafana, зашифрованные резервные копии в S3 и проверка восстановления в изолированном Docker-окружении."
         ],
         stack: [
           "Python",
@@ -252,7 +255,9 @@ export const resume = {
           "OpenRouter · LLM API",
           "Codex",
           "Docker Compose",
-          "GitHub Actions"
+          "GitHub Actions",
+          "Prometheus · Grafana",
+          "S3 · age"
         ],
         category: "Проект для заказчика"
       },
@@ -288,14 +293,15 @@ export const resume = {
       },
       {
         id: "kvartirka",
-        title: "Kvartirka",
+        title: "Kvartirka / RentalKeeper",
         role: "Владелец проекта · разработка и развёртывание",
         contribution: "Код разработан с существенным участием AI-инструментов.",
         status: "Используется заказчиком · дорабатывается",
-        description: "Рабочее пространство для управления арендными объектами, бронированиями и финансовым учётом.",
+        description: "Сервис управления посуточной арендой: бронирования, платежи, документы и финансовое планирование по объектам и портфелю.",
         bullets: [
-          "В API на NestJS/Fastify и интерфейсе Next.js реализованы объекты, бронирования, платежи, расходы и документы; стек — Prisma, PostgreSQL и Redis.",
-          "Проект включает финансовый учёт по портфелю и объектам, развёртывание Docker Compose и проверки доступности через GitHub Actions."
+          "Финансовое планирование и план-факт: выручка, загрузка, комиссии площадок и платёжных сервисов, зарплата, налоги, распределение расходов и прибыль по объектам и портфелю.",
+          "Webhooks RealtyCalendar импортируют брони, платежи и возвраты с защитой от повторных событий и обработкой устаревших обновлений и конфликтов.",
+          "API на NestJS/Fastify и интерфейс Next.js используют Prisma/PostgreSQL и Redis. Доставка через GitHub Actions включает Docker-образы, миграции, проверки готовности, настраиваемые canary-проверки API/UI и откат приложения."
         ],
         stack: [
           "TypeScript",
